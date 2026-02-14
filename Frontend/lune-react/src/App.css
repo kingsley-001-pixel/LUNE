@@ -1,0 +1,49 @@
+#heroBlock {
+    background-image: url(./assets/wednesday.png);
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* animation: slideImages 60s ease 0s infinite backwards alternate; */
+    background-clip: border-box;
+}
+
+@keyframes slideImages {
+    0% {
+        background-image: url(./assets/anime1.png);
+    }
+
+    20% {
+        background-image: url(./assets/kdramaimage1.png);
+    }
+
+    40% {
+        background-image: url(./assets/movieimg.png);
+    }
+
+    60% {
+        background-image: url(./assets/anime2.png);
+    }
+
+    80% {
+        background-image: url(./assets/kdramaimage2.png);
+    }
+
+    100% {
+        background-image: url(./assets/movieimg2.png);
+    }
+}
+
+#spinner {
+    animation: spin 20s ease infinite forwards ;
+    margin-left: 35%;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(1080deg);
+    }
+}

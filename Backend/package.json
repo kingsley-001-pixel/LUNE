@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "A movie Website",
+  "homepage": "https://github.com/kingsley-001-pixel/LUNE#readme",
+  "bugs": {
+    "url": "https://github.com/kingsley-001-pixel/LUNE/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingsley-001-pixel/LUNE.git"
+  },
+  "license": "ISC",
+  "author": "Kingsley",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.1",
+    "nodemon": "^3.1.11"
+  }
+}
