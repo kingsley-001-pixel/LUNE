@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import { Link } from "react-router-dom";
 import { FaHome, FaSpinner } from "react-icons/fa";
+import HorizontalScroll from "./HorizontalScroll.jsx";
 
 
 
@@ -119,9 +120,9 @@ function GenrePage() {
     }
 
 
-    return (
+    return(
         <div className="relative
-                        bg-lightBg text-lightTextMain min-h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto">
+                        bg-lightBg text-lightTextMain min-h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto overflow-x-hidden">
         <div className="flex flex-col gap-2 justify-center items-center">
             <header className=" w-full mt-0 pt-0">
                     <h1 className="w-4 ml-3 pr-6 p-2 text-3xl bg-darkBg text-darkTextMain dark:bg-lightBg dark:text-lightTextMain translate-y-7 rounded-t-full font-bold border-none md:text-6xl md:bg-darkBg md:text-darkTextMain md:dark:bg-lightBg md:dark:text-lightTextMain md:w-12 md:pb-0">L</h1>
@@ -140,9 +141,9 @@ function GenrePage() {
 
             <section id="movieGrid" className="block">
                 {movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : 
-                <div className="grid grid-cols-2 gap-10 py-2 px-4 md:grid-cols-6 justify-between">
+                <div className="grid grid-cols-2 gap-12 py-2 px-4 md:grid-cols-6 md:mr-5">
                     {movies.sort((a,b) => b.vote_average - a.vote_average).map((movie, index) => (
-                        <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-96 text-lightTextMuted w-48 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
+                        <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
                             <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full h-auto " />
                             <div id="movieContent" className=" px-2 py-4">
                                 <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
@@ -160,7 +161,6 @@ function GenrePage() {
                     </button>
                     </div>
                 )}
-                {/* <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center" onClick={() => fetchGenreData()}>{error ? "Server Error, Click to Retry" : ""}</button> */}
             </section>
 
 
@@ -170,7 +170,7 @@ function GenrePage() {
             </footer>
         </div>
         </div>
-    );
+    ) 
 }
 
 export default GenrePage

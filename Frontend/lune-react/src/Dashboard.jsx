@@ -94,7 +94,7 @@ function Dashboard({name='Guest'}) {
     }, [])
 
     
-    // TOP RATED MOVIES FETCH API
+    // UPCOMING MOVIES FETCH API
     const [upcomingMovies, setUpcomingMovies] = useState([])
         const [upcomingMoviesLoading, setUpcomingMoviesLoading] = useState(false)
         const [upcomingMoviesError, setUpcomingMoviesError] = useState(false)
@@ -200,27 +200,22 @@ function Dashboard({name='Guest'}) {
                     </div>
                 </section>
 
-                {/* <section id="test" className="block mt-5 mx-3">
-                    <h1>TEST</h1>
-                        {<HorizontalScroll sectionApi={trendingMovies}/>}
-                </section> */}
-
                 <section className="block mt-5 mx-3">
                 <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">TRENDING MOVIES</h1>
                     {<HorizontalScroll sectionApi={trendingMovies}/>}
-                    {trendingMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center mt-2" onClick={() => fetchTrendingMovies()}>Server error, click to retry</button>}
+                    {trendingMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center mt-5" onClick={() => fetchTrendingMovies()}>Server error, click to retry</button>}
                     </section>
 
                 <section className="block mt-5 mx-3">
                     <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">TOP RATED MOVIES</h1>
                     {<HorizontalScroll sectionApi={topRatedMovies}/>}
-                    {topRatedMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center mt-2" onClick={() => fetchTopRatedMovies()}>Server error, click to retry</button>}
+                    {topRatedMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 mt-5 text-center" onClick={() => fetchTopRatedMovies()}>Server error, click to retry</button>}
                     </section>
                     
                 <section className="block mt-5 mx-3">
                     <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">UPCOMING MOVIES</h1>
                     {<HorizontalScroll sectionApi={upcomingMovies}/>}
-                    {upcomingMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center mt-2" onClick={() => fetchUpcomingMovies()}>Server error, click to retry</button>}
+                    {upcomingMoviesError && <button className="w-fit rounded-md py-1 px-2 font-medium text-white mt-5 bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center" onClick={() => fetchUpcomingMovies()}>Server error, click to retry</button>}
                     </section>
 
                     <section className="block mt-5">
