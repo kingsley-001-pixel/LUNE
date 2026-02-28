@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import { Link } from "react-router-dom";
-import { FaHome, FaSpinner } from "react-icons/fa";
-import HorizontalScroll from "./HorizontalScroll.jsx";
+import { FaHome, FaSpinner, FaArrowUp } from "react-icons/fa";
+import ScrollToTop from "./ScrollToTop.jsx";
+import VerticalScroll from "./VerticalScroll.jsx";
+import SearchBar from "./SearchBar.jsx";
 
 
 
@@ -58,6 +60,7 @@ function GenrePage() {
 
         const fetchGenreData = async (pageNumber) => {
         try {
+            setError(false)
             setIsShown(true)
             const response = await fetch("http://localhost:4000/api/v1/tmdb/genre", {
                 method: "POST",
@@ -68,14 +71,16 @@ function GenrePage() {
                                         pageNumber: pageNumber
                 })
             })
-            
-            if(!response.ok) {
-                console.log('Server error');
-                setError(true)
-                setIsShown(false)
-            }
 
             const data = await response.json()
+            
+            if(!response.ok) {
+                console.log(data.message)
+                setError(true)
+                setIsShown(false)
+                return;
+            }
+
 
             setMovies(prevMovies => [...prevMovies, ...data.data.results])
             setPage(data.data.page)
@@ -83,7 +88,6 @@ function GenrePage() {
             setIsShown(false)
             setError(false)
         } catch (error) {
-            setError(true)
             console.log(error);
         }
     }
@@ -119,6 +123,34 @@ function GenrePage() {
         navigate('/dashboard')
     }
 
+    // const handleScroll = () => {
+    //     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isShown && page < totalPages) {
+    //         loadMoreMovies()
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     }
+    // }, [isShown, page, totalPages]) 
+
+    const loadMoreMoviesBtn = document.getElementById('loadMoreMoviesBtn');
+
+    useEffect(() => {
+        if (loadMoreMoviesBtn) {
+            loadMoreMoviesBtn.addEventListener('click', loadMoreMovies);
+        }
+        return () => {
+            if (loadMoreMoviesBtn) {
+                loadMoreMoviesBtn.removeEventListener('click', loadMoreMovies);
+            }
+        }
+    }
+    , [loadMoreMoviesBtn, page, totalPages, isShown])
+
+
 
     return(
         <div className="relative
@@ -128,6 +160,8 @@ function GenrePage() {
                     <h1 className="w-4 ml-3 pr-6 p-2 text-3xl bg-darkBg text-darkTextMain dark:bg-lightBg dark:text-lightTextMain translate-y-7 rounded-t-full font-bold border-none md:text-6xl md:bg-darkBg md:text-darkTextMain md:dark:bg-lightBg md:dark:text-lightTextMain md:w-12 md:pb-0">L</h1>
                     <div className="translate-y-[-40px] translate-x-10 md:ml-16 p-3 md:translate-y-[-40px] md:translate-x-0"><h1 className="text-3xl tracking-widest font-bold">LUNE</h1> <p className="">Discover and save movies worth your time.</p></div>
                     <button type="button" onClick={toggleTheme} className="absolute right-5 top-7 text-red-700 cursor-pointer">{isDark ? (<HiOutlineSun color="#f6f7fb" size={30}/>) : (<HiOutlineMoon color="#0b0f1a" size={30}/>)}</button>
+
+                    <SearchBar/>
             </header>
 
             <h1 className="font-semibold text-2xl mt-[-40px] md:text-4xl">{genre.toUpperCase()}</h1>
@@ -141,22 +175,10 @@ function GenrePage() {
 
             <section id="movieGrid" className="block">
                 {movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : 
-                <div className="grid grid-cols-2 gap-12 py-2 px-4 md:grid-cols-6 md:mr-5">
-                    {movies.sort((a,b) => b.vote_average - a.vote_average).map((movie, index) => (
-                        <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
-                            <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full h-auto " />
-                            <div id="movieContent" className=" px-2 py-4">
-                                <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
-                                <h2>{movie.release_date}</h2>
-                                <h2>⭐{movie.vote_average}</h2>
-                                <p className="mb-2 ">{movie.overview}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>}
+                <VerticalScroll Movies={movies}/>}
                 <button onClick={() => fetchGenreData()}>{error ? "Server Error, Click to Retry" : ""}</button>
                 {page < totalPages && (
-                    <div className="text-center"><button onClick={loadMoreMovies} className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40">
+                    <div className="text-center"><button id="loadMoreMoviesBtn" onClick={loadMoreMovies} className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40">
                         {isShown ? "Loading..." : "Load More Movies"}
                     </button>
                     </div>
@@ -168,9 +190,11 @@ function GenrePage() {
             <button onClick={backToHome} className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center flex gap-2">{<FaHome />}Back To Home</button>
                     <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>
             </footer>
+
+                <ScrollToTop/>
         </div>
         </div>
-    ) 
+    )
 }
 
 export default GenrePage

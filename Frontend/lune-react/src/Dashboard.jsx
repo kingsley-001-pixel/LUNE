@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import {HiOutlineUser} from "react-icons/hi2"
-import { FaSearch, FaSpinner } from "react-icons/fa"
+import { FaArrowUp } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import MovieRow from "./MovieRow.jsx"
-import BackToTop from "./BackToTop.jsx"
 import HorizontalScroll from "./HorizontalScroll.jsx"
+import SearchBar from "./SearchBar.jsx"
+import ScrollToTop from "./ScrollToTop.jsx"
 
 function Dashboard({name='Guest'}) {
 
@@ -159,10 +160,16 @@ function Dashboard({name='Guest'}) {
     // GETTING CURRENT YEAR
     const getYear = new Date().getFullYear();
 
-    const [inputedMovieName, setInputedMovieName] = useState('')
+    const scrollToTop = () => {
+        // console.log('object');
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
+    }
 
 
-    
+
     return (
         <div className="relative scrollbar-hide
                         bg-lightBg text-lightTextMain h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto">
@@ -176,14 +183,11 @@ function Dashboard({name='Guest'}) {
                         <h1 className="text-3xl md:text-4xl"> {Username || name}</h1>
                     </div>
                         <br />
-                    <div id="searchDiv" className="flex items-center justify-center w-full px-4 py-2">
-                    <input onChange={(e) => setInputedMovieName(e.target.value.trim())} type="search" className="w-full py-2 px-4 rounded-full bg-lightCard border border-lightBorder text-lightTextMain sticky top-0 placeholder:text-lightTextMuted
-                    dark:bg-darkCard dark:border-darkBorder dark:text-darkTextMain dark:placeholder:text-darkTextMuted
-                    focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-9" id="searchBar" placeholder="Search movies by name..."/>
-                    <Link to={`/search/${inputedMovieName}`} className="ml-3 text-xl">{<FaSearch/>}</Link>
-                    </div>
+                    
                     <button onClick={toggleTheme} className="absolute right-5 top-7 text-red-700 cursor-pointer">{isDark ? (<HiOutlineSun color="#f6f7fb" size={30}/>) : (<HiOutlineMoon color="#0b0f1a" size={30}/>)}</button>
-                    <BackToTop/>
+                    {/* <BackToTop/> */}
+
+                    <SearchBar/>
                 </header>
 
                 <section id="hero" className="mt-5 py-2 px-4 relative w-full ">
@@ -236,6 +240,10 @@ function Dashboard({name='Guest'}) {
                         </p>
                         <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>
                     </footer>
+
+                        <button className="fixed bottom-4 right-4 bg-accent text-white p-2 rounded-full" onClick={scrollToTop}>
+                                    <FaArrowUp size={22} />
+                                </button>
                 </div>
             </div>
     )

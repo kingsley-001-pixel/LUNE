@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom"
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import { Link } from "react-router-dom";
 import { FaHome, FaSpinner, FaSearch } from "react-icons/fa";
+import ScrollToTop from "./ScrollToTop.jsx";
+import SearchBar from "./SearchBar.jsx";
+import VerticalScroll from "./VerticalScroll.jsx";
 
 
 function Search() {
@@ -19,6 +22,7 @@ function Search() {
         const fetchData = async (pageNumber) => {
             try {
                 setIsShown(true)
+                setError(false)
                 const response = await fetch('http://localhost:4000/api/v1/tmdb/search', {
                     method: "POST",
                 headers: {
@@ -33,6 +37,7 @@ function Search() {
                     console.log('Server error');
                     setError(true)
                     setIsShown(false)
+                    return;
                 }
             const data = await response.json()
             
@@ -79,7 +84,6 @@ function Search() {
         navigate('/dashboard')
     }
 
-        const [inputedMovieName, setInputedMovieName] = useState('')
 
     return (
         <div className="relative
@@ -91,30 +95,14 @@ function Search() {
                 <button type="button" onClick={toggleTheme} className="absolute right-5 top-7 text-red-700 cursor-pointer">{isDark ? (<HiOutlineSun color="#f6f7fb" size={30}/>) : (<HiOutlineMoon color="#0b0f1a" size={30}/>)}</button>
                 <h1 className="text-center text-2xl md:text-4xl">Search: {movieName}</h1>
                 <br />
-                <div id="searchDiv" className="flex items-center justify-center w-full px-4 py-2">
-                    <input onChange={(e) => setInputedMovieName(e.target.value)} type="search" className="w-full py-2 px-4 rounded-full bg-lightCard border border-lightBorder text-lightTextMain sticky top-0 placeholder:text-lightTextMuted
-                    dark:bg-darkCard dark:border-darkBorder dark:text-darkTextMain dark:placeholder:text-darkTextMuted
-                    focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-9" id="searchBar" placeholder="Search movies by name..."/>
-                    <Link to={`/search/${inputedMovieName}`} className="ml-3 text-xl">{<FaSearch/>}</Link>
-                </div>
+                
+                <SearchBar/>
             </header>
 
             <section id="movieGrid" className="block">
                 {noMovieFound ? <p className="text-3xl translate-y-24">No movie found!</p> : ''}
-                {error === true || movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : 
-                <div className="grid grid-cols-2 gap-10 py-2 px-4 md:grid-cols-6 justify-between">
-                    {movies.sort((b,a) => a.vote_average - b.vote_average).map((movie, index) => (
-                        <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-96 text-lightTextMuted w-48 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg ">
-                            <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full"/>
-                            <div id="movieContent" className=" px-2 py-4">
-                                <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
-                                <h2>{movie.release_date}</h2>
-                                <h2>⭐{movie.vote_average}</h2>
-                                <p className="mb-2 ">{movie.overview}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>}
+                {error === true || movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : <VerticalScroll Movies={movies}/>
+                }
                 <br />
                 <button onClick={() => fetchData(1)}>{error && noMovieFound ? "Server Error, Click to Retry" : ""}</button>
                 {page < totalPages && (
@@ -129,6 +117,8 @@ function Search() {
             <button onClick={backToHome} className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center flex gap-2">{<FaHome/>}Back To Home</button>
             <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>
             </footer>
+
+            <ScrollToTop/>
             </div>
         </div>
     )

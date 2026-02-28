@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { FaSpinner } from "react-icons/fa"
 import HorizontalScroll from "./HorizontalScroll"
 
 function MovieRow({title, fetchUrl}) {
@@ -16,6 +15,7 @@ function MovieRow({title, fetchUrl}) {
                 console.log('Server error');
                 setError(true)
                 setLoading(false)
+                return;
             }
             const data = await response.json()
             setMovies(data.data.results)
@@ -35,7 +35,7 @@ function MovieRow({title, fetchUrl}) {
         <div>
             <h2 className="text-2xl font-semibold tracking-wide md:text-3xl text-left ml-2 mt-4 mb-[-10px]">{title}</h2>
             {<HorizontalScroll sectionApi={movies}/>}
-        {error && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center mt-2" onClick={() => fetchData()}>Server error, click to retry</button>}
+        {error && <button className="w-fit rounded-md py-1 px-2 font-medium text-white mt-5 bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center" onClick={() => fetchData()}>Server error, click to retry</button>}
         
         </div>
     )
