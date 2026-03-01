@@ -187,7 +187,7 @@ function Login() {
                 </form>
                 {/* FOOTER */}
                 <footer className="mt-14 md:mt-10 md:mb-2 flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
-                    <p>By continuing, you agree to LUNE's <span className="font-normal cursor-pointer">Terms of Service and Privacy Policy.</span></p>
+                    <p className="flex justify-start mx-12">By continuing, you agree to LUNE's Terms of Service and Privacy Policy.</p>
                     <p>&copy;{getYear} Lune. All rights reserved.</p>
                 </footer>
                 </div>
