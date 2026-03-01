@@ -254,8 +254,8 @@ function Signup() {
                     bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40">Already have an account? Log in</button>
                 </form>
                 {/* FOOTER */}
-                <footer className="mt-2 mb-4">
-                    <p>By creating an account, you agree to our <span className="font-normal cursor-pointer">Terms of Service and Privacy Policy.</span></p>
+                <footer className="mt-2 mb-4 flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
+                    <p>By creating an account, you agree to LUNE's <span className="font-normal cursor-pointer">Terms of Service and Privacy Policy.</span></p>
                 </footer>
                 </div>
                 </div>

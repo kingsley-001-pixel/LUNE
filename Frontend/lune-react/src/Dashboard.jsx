@@ -225,7 +225,7 @@ function Dashboard({name='Guest'}) {
                         </div>
                     </section>
 
-                    <footer className="flex flex-col gap-3 justify-center items-center mb-2">
+                    <footer className="flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
                         <p className="text-center">Data provided by <a href="https://www.themoviedb.org/" className="underline hover:text-lightTextMuted">TMBD</a>
                         </p>
                         <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>

@@ -186,8 +186,8 @@ function Login() {
                     bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40 md:w-full">Don't have an account? Sign up</button>
                 </form>
                 {/* FOOTER */}
-                <footer className="mt-14 md:mt-10 md:mb-2">
-                    <p>By continuing, you agree to LUNE's terms and privacy policy.</p>
+                <footer className="mt-14 md:mt-10 md:mb-2 flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
+                    <p>By continuing, you agree to LUNE's <span className="font-normal cursor-pointer">Terms of Service and Privacy Policy.</span></p>
                     <p>&copy;{getYear} Lune. All rights reserved.</p>
                 </footer>
                 </div>
