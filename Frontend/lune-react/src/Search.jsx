@@ -24,7 +24,7 @@ function Search() {
             try {
                 setIsShown(true)
                 setError(false)
-                const response = await fetch('http://localhost:4000/api/v1/tmdb/search', {
+                const response = await fetch('https://lune-backend-eclm.onrender.com/api/v1/tmdb/search', {
                     method: "POST",
                 headers: {
                 "Content-Type": "application/json",

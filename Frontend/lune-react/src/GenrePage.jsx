@@ -61,7 +61,7 @@ function GenrePage() {
         try {
             setError(false)
             setIsShown(true)
-            const response = await fetch("http://localhost:4000/api/v1/tmdb/genre", {
+            const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/tmdb/genre", {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",

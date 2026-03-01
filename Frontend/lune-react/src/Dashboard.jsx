@@ -22,7 +22,7 @@ function Dashboard({name='Guest'}) {
             navigate('/login')
         }
 
-        const response = await fetch("http://localhost:4000/api/v1/users/dashboard", {
+        const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/users/dashboard", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -48,7 +48,7 @@ function Dashboard({name='Guest'}) {
         const fetchTrendingMovies = async () => {
         try {
             setTrendingMoviesLoading(true)
-            const response = await fetch("http://localhost:4000/api/v1/tmdb/trending", {
+            const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/tmdb/trending", {
                 method: "GET"})
             if(!response.ok) {
                 console.log('Server error');
@@ -76,7 +76,7 @@ function Dashboard({name='Guest'}) {
         const fetchTopRatedMovies = async () => {
         try {
             setTopRatedMoviesLoading(true)
-            const response = await fetch("http://localhost:4000/api/v1/tmdb/top-rated", {
+            const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/tmdb/top-rated", {
                 method: "GET"})
             if(!response.ok) {
                 console.log('Server error');
@@ -104,7 +104,7 @@ function Dashboard({name='Guest'}) {
         const fetchUpcomingMovies = async () => {
         try {
             setUpcomingMoviesLoading(true)
-            const response = await fetch("http://localhost:4000/api/v1/tmdb/upcoming", {
+            const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/tmdb/upcoming", {
                 method: "GET"})
             if(!response.ok) {
                 console.log('Server error');
@@ -215,13 +215,13 @@ function Dashboard({name='Guest'}) {
                     <section className="block mt-5">
                         <h2 className="text-3xl font-semibold mb-2 tracking-widest md:text-4xl text-center underline underline-offset-8">Discover By Language</h2>
                         <div className="">
-                            <MovieRow title={'Korean'} fetchUrl={"http://localhost:4000/api/v1/tmdb/korean"}/>
+                            <MovieRow title={'Korean'} fetchUrl={"https://lune-backend-eclm.onrender.com/api/v1/tmdb/korean"}/>
 
-                            <MovieRow title={'Japanese'} fetchUrl={"http://localhost:4000/api/v1/tmdb/japanese"}/>
+                            <MovieRow title={'Japanese'} fetchUrl={"https://lune-backend-eclm.onrender.com/api/v1/tmdb/japanese"}/>
 
-                            <MovieRow title={'Chinese'} fetchUrl={"http://localhost:4000/api/v1/tmdb/chinese"}/>
+                            <MovieRow title={'Chinese'} fetchUrl={"https://lune-backend-eclm.onrender.com/api/v1/tmdb/chinese"}/>
 
-                            <MovieRow title={'Western'} fetchUrl={"http://localhost:4000/api/v1/tmdb/western"}/>
+                            <MovieRow title={'Western'} fetchUrl={"https://lune-backend-eclm.onrender.com/api/v1/tmdb/western"}/>
                         </div>
                     </section>
 
