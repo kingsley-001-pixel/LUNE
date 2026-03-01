@@ -105,7 +105,7 @@ function Signup() {
         try {
             setIsSubmitting(true)
             // SENDING REQUEST
-            const registrationResponse = await fetch ("http://localhost:4000/api/v1/users/register", {
+            const registrationResponse = await fetch ("https://lune-backend-eclm.onrender.com/api/v1/users/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

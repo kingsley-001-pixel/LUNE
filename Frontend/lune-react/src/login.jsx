@@ -73,7 +73,7 @@ function Login() {
         // SUBMISSION OF FORM DATA TO MY DATABASE FOR AUTHENTICATION
             setIsLoggingIn(true)
             // SENDING REQUEST
-            const registrationResponse = await fetch ("http://localhost:4000/api/v1/users/login", {
+            const registrationResponse = await fetch ("https://lune-backend-eclm.onrender.com/api/v1/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
