@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
-import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import { Link } from "react-router-dom";
-import { FaHome, FaSpinner, FaArrowUp } from "react-icons/fa";
+import { FaHome, FaSpinner} from "react-icons/fa";
 import ScrollToTop from "./ScrollToTop.jsx";
 import VerticalScroll from "./VerticalScroll.jsx";
 import SearchBar from "./SearchBar.jsx";
-
+import NavMenu from "./NavMenu.jsx";
 
 
 function GenrePage() {
@@ -98,17 +97,6 @@ function GenrePage() {
         fetchGenreData(1)
     }, [genreId])
 
-    const [isDark, setIsDark] = useState(false)
-        const toggleTheme = () => {
-            setIsDark(!isDark)
-    
-            if(!isDark) {
-                document.documentElement.classList.add("dark")
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
-    }
-
     // GETTING CURRENT YEAR
     const getYear = new Date().getFullYear();
 
@@ -159,12 +147,12 @@ function GenrePage() {
             <header className=" w-full mt-0 pt-0">
                     <h1 className="w-4 ml-3 pr-6 p-2 text-3xl bg-darkBg text-darkTextMain dark:bg-lightBg dark:text-lightTextMain translate-y-7 rounded-t-full font-bold border-none md:text-6xl md:bg-darkBg md:text-darkTextMain md:dark:bg-lightBg md:dark:text-lightTextMain md:w-12 md:pb-0">L</h1>
                     <div className="translate-y-[-40px] translate-x-10 md:ml-16 p-3 md:translate-y-[-40px] md:translate-x-0"><h1 className="text-3xl tracking-widest font-bold">LUNE</h1> <p className="">Discover and save movies worth your time.</p></div>
-                    <button type="button" onClick={toggleTheme} className="absolute right-5 top-7 text-red-700 cursor-pointer">{isDark ? (<HiOutlineSun color="#f6f7fb" size={30}/>) : (<HiOutlineMoon color="#0b0f1a" size={30}/>)}</button>
 
+                    <NavMenu/>
                     <SearchBar/>
             </header>
 
-            <h1 className="font-semibold text-2xl mt-[-40px] md:text-4xl">{genre.toUpperCase()}</h1>
+            <h1 className="font-semibold text-2xl md:text-4xl">{genre.toUpperCase()}</h1>
 
             <section id="genre">
                 <div className="flex flex-wrap gap-3 py-2 px-4 justify-start">

@@ -9,7 +9,6 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
                 left: -380,
                 behavior: "smooth"
             })
-            console.log("Done");
         }
 
         const scrollRight = () => {
@@ -34,9 +33,9 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
                     </div>
                     ))}
                         </div>
-                        <button onClick={scrollLeft} className="absolute left-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center z-99 opacity-65">{<FaArrowLeft/>}</button>
+                        <button onClick={scrollLeft} className="absolute left-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowLeft/>}</button>
 
-                        <button onClick={scrollRight} className="absolute right-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center z-99 opacity-65">{<FaArrowRight/>}</button>
+                        <button onClick={scrollRight} className="absolute right-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowRight/>}</button>
                         </div>
         )
     }

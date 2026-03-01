@@ -139,9 +139,9 @@ function Login() {
                     <div className="box-border w-[490px] md:border-b-2 md:border-darkBg md:w-[556px] md:border-r-1 md:pr-3 md:rounded-r-3xl text-center dark:md:border-lightBg">
                 <form className="p-2 md:space-y-8">
                     {/* EMAIL INPUT */}
-                    <input value={email} onChange={handleEmail} className="w-full rounded-md px-4 py-3 mt-4 mb-8 md:mb-0 md:mt-7 bg-lightCard border border-lightBorder text-lightTextMain placeholder:text-lightTextMuted
+                    <input value={email} onChange={handleEmail} className="w-80 rounded-md px-4 py-3 mt-4 mb-8 md:mb-0 md:mt-7 md:w-full bg-lightCard border border-lightBorder text-lightTextMain placeholder:text-lightTextMuted
                     dark:bg-darkCard dark:border-darkBorder dark:text-darkTextMain dark:placeholder:text-darkTextMuted
-                    focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-14" 
+                    focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-12" 
                         type="email" 
                         name="email" 
                         id="email" 
@@ -153,9 +153,9 @@ function Login() {
                         <input 
                         value={password} 
                         onChange={handlePassword} 
-                        className="w-full rounded-md px-4 py-3 my-2 mb-14 md:mb-0 bg-lightCard border border-lightBorder text-lightTextMain placeholder:text-lightTextMuted
+                        className="w-80 rounded-md px-4 py-3 my-2 mb-14 md:mb-0 bg-lightCard border border-lightBorder text-lightTextMain placeholder:text-lightTextMuted
                         dark:bg-darkCard dark:border-darkBorder dark:text-darkTextMain dark:placeholder:text-darkTextMuted
-                        focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-14" 
+                        focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent h-12 md:w-full " 
                         type={showPassword ? "text" : "password"} 
                         name="password" 
                         id="password" 
@@ -163,7 +163,7 @@ function Login() {
                         <button 
                         type="button" 
                         onClick={handleShowPassword} 
-                        className="absolute text-2xl right-5 top-6 text-lightTextMuted/60 hover:text-lightTextMuted " >{showPassword ? <FaEyeSlash/> : <FaEye/>}</button>
+                        className="absolute text-2xl top-5 right-24 md:right-5 md:top-6 text-lightTextMuted/60 hover:text-lightTextMuted " >{showPassword ? <FaEyeSlash/> : <FaEye/>}</button>
                     </div>
                     {/* ERROR MESSAGE */}
                     {errorMessage && <p className="text-sm text-error mb-2">{errorMessage}</p>}
@@ -175,15 +175,15 @@ function Login() {
                     type="submit" 
                     disabled={isLoggingIn} 
                     onClick={handleLogin}  
-                    className="w-full rounded-md py-3 font-medium text-white
-                    bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40" >{isLoggingIn ? "Logging in..." : "Log in"}</button>
+                    className="w-80 rounded-md py-3 font-medium text-white
+                    bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40 md:w-full" >{isLoggingIn ? "Logging in..." : "Log in"}</button>
                     <br />
                     <br />
                     {/* LOGIN-REDIRECT BUTTON */}
                     <button 
                     type="button" onClick={navigateToSignupPage}
-                    className="w-full rounded-md py-3 font-medium text-white
-                    bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40">Don't have an account? Sign up</button>
+                    className="w-80 rounded-md py-3 font-medium text-white
+                    bg-primary hover:bg-primaryHover transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent/40 md:w-full">Don't have an account? Sign up</button>
                 </form>
                 {/* FOOTER */}
                 <footer className="mt-14 md:mt-10 md:mb-2">

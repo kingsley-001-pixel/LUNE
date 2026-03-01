@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
                                                                                         email: user.email,
                                                                                     }})
     } catch (error) {
-        return res.status(500).json({message: "Internal server error. Try again later."}, error)
+        return res.status(500).json({message: "Server error, try again later.", error: error.message})
     }
 }
 
@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
                                                                             email: user.email,
                                                                         }})
     } catch (error) {
-        return res.status(500).json({message: "Internal server error", error: error.message })
+        return res.status(500).json({message: "Server error", error: error.message })
     }
 }
 

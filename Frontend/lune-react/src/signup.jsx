@@ -92,7 +92,7 @@ function Signup() {
             setErrorMessage("Re-enter your password!")
             return;
         }
-        if (password.length < 6 || confirmPassword.length < 6) {
+        if (password.length < 8 || confirmPassword.length < 8) {
             setErrorMessage("Password is too short!")
             return;
         }
@@ -122,7 +122,7 @@ function Signup() {
         // CHECKING RESPONSE AND RETURNING MESSAGE
         if (!registrationResponse.ok) {
             console.log(data.message)
-
+            setErrorMessage(data.message)
         } else {
             setSuccessMessage(data.message)
             setUsername("")
@@ -206,7 +206,7 @@ function Signup() {
                         name="password" 
                         id="password" 
                         placeholder="Create a password" />
-                        <p className="text-left text-sm text-accent/70 font-light ml-4 mt-0">Password should be atleast 6 characters long</p>
+                        <p className="text-left text-sm text-accent/70 font-light ml-4 mt-0">Password should be atleast 8 characters long</p>
                         {/* SHOW/HIDE PASSWORD BUTTON */}
                         <button 
                         type="button" 

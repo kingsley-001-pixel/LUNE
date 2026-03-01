@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
+// import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import {HiOutlineUser} from "react-icons/hi2"
-import { FaArrowUp } from "react-icons/fa"
+// import { FaSignOutAlt, FaBars } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import MovieRow from "./MovieRow.jsx"
 import HorizontalScroll from "./HorizontalScroll.jsx"
 import SearchBar from "./SearchBar.jsx"
-import ScrollToTop from "./ScrollToTop.jsx"
+import NavMenu from "./NavMenu.jsx"
 
 function Dashboard({name='Guest'}) {
 
@@ -34,6 +34,7 @@ function Dashboard({name='Guest'}) {
                 console.log('Error fetching response');
             }
         }
+
     useEffect( () => {
         fetchDashboard();
     }, [])
@@ -128,16 +129,7 @@ function Dashboard({name='Guest'}) {
         username ? setUsername(username.charAt(0).toUpperCase() + username.slice(1)) : ''
     }, [username])
 
-    // THEME TOGGLE
-    const [isDark, setIsDark] = useState(false)
-    const toggleTheme = () => {
-        setIsDark(!isDark)
-        if(!isDark) {
-            document.documentElement.classList.add("dark")
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    }
+    
 
     const genres = [
         {genre: "Action", code: "action"},
@@ -160,13 +152,9 @@ function Dashboard({name='Guest'}) {
     // GETTING CURRENT YEAR
     const getYear = new Date().getFullYear();
 
-    const scrollToTop = () => {
-        // console.log('object');
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        })
-    }
+
+
+
 
 
 
@@ -178,14 +166,16 @@ function Dashboard({name='Guest'}) {
                 <header className=" w-full mt-0 pt-0">
                     <h1 className="w-4 ml-3 pr-6 p-2 text-3xl bg-darkBg text-darkTextMain dark:bg-lightBg dark:text-lightTextMain translate-y-7 md:text-6xl rounded-t-full font-bold border-none md:bg-darkBg md:text-darkTextMain md:dark:bg-lightBg md:dark:text-lightTextMain md:w-12 md:pb-0">L</h1>
                     <div className="translate-y-[-40px] translate-x-10 md:ml-16 p-3 md:translate-y-[-40px] md:translate-x-0"><h1 className="text-3xl tracking-widest font-bold">LUNE</h1> <p>Discover and save movies worth your time.</p></div>
+                    <div>
+                        
+                    </div>
                     <div className="text-center items-center pl-3">
                         <button className="bg-accent p-1 text-6xl rounded-full md:text-8xl">{<HiOutlineUser color="white"/>}</button>
                         <h1 className="text-3xl md:text-4xl"> {Username || name}</h1>
                     </div>
                         <br />
                     
-                    <button onClick={toggleTheme} className="absolute right-5 top-7 text-red-700 cursor-pointer">{isDark ? (<HiOutlineSun color="#f6f7fb" size={30}/>) : (<HiOutlineMoon color="#0b0f1a" size={30}/>)}</button>
-                    {/* <BackToTop/> */}
+                    <NavMenu/>
 
                     <SearchBar/>
                 </header>
@@ -240,10 +230,6 @@ function Dashboard({name='Guest'}) {
                         </p>
                         <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>
                     </footer>
-
-                        <button className="fixed bottom-4 right-4 bg-accent text-white p-2 rounded-full" onClick={scrollToTop}>
-                                    <FaArrowUp size={22} />
-                                </button>
                 </div>
             </div>
     )
