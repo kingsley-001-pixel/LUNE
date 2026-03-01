@@ -169,7 +169,9 @@
     "zod": "^4.3.5",
     "zod-validation-error": "^4.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4"
+  },
   "scripts": {
     "build": "vite build",
     "dev": "vite",
