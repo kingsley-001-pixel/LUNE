@@ -75,6 +75,7 @@ function Search() {
         navigate('/dashboard')
     }
 
+    document.title = `Search results for "${movieName}" | Lune`
 
     return (
         <div className="relative
@@ -91,7 +92,10 @@ function Search() {
 
             <section id="movieGrid" className="block">
                 {noMovieFound ? <p className="text-3xl translate-y-24">No movie found!</p> : ''}
-                {error === true || movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : <VerticalScroll Movies={movies}/>
+                {error === true || movies.length === 0 ? <FaSpinner id="spinner" className="text-center text-4xl my-5"/> : <>
+                <h2 className="text-3xl text-center mt-4">Search results for "{movieName}"</h2>
+                <VerticalScroll Movies={movies}/>
+                </>
                 }
                 <br />
                 <button onClick={() => fetchData(1)}>{error && noMovieFound ? "Server Error, Click to Retry" : ""}</button>

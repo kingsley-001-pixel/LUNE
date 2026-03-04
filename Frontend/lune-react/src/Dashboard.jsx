@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-// import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
 import {HiOutlineUser} from "react-icons/hi2"
-// import { FaSignOutAlt, FaBars } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import MovieRow from "./MovieRow.jsx"
 import HorizontalScroll from "./HorizontalScroll.jsx"
@@ -43,6 +41,8 @@ function Dashboard({name='Guest'}) {
     }, [])
         
 
+    
+
     // TRENDING MOVIES FETCH API
     const [trendingMovies, setTrendingMovies] = useState([])
         const [trendingMoviesLoading, setTrendingMoviesLoading] = useState(false)
@@ -59,7 +59,6 @@ function Dashboard({name='Guest'}) {
                 setTrendingMoviesLoading(false)
             }
             const data = await response.json()
-            // const trimmedData = data.data.results.slice(0,10)
             setTrendingMovies(data.data.results)
             setTrendingMoviesError(false)
             setTrendingMoviesLoading(false)
@@ -71,6 +70,7 @@ function Dashboard({name='Guest'}) {
         fetchTrendingMovies()
     }, [])
 
+    console.log(trendingMovies)
     // TOP RATED MOVIES FETCH API
     const [topRatedMovies, setTopRatedMovies] = useState([])
         const [topRatedMoviesLoading, setTopRatedMoviesLoading] = useState(false)

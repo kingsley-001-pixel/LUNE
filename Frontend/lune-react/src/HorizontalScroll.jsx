@@ -1,5 +1,7 @@
 import React from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
+import { useState } from "react";
+
 
     const HorizontalScroll = ({sectionApi}) => {
         const scrollContainerRef = React.useRef(null)
@@ -18,6 +20,28 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
             })
         }
 
+        const [favorites, setFavorites] = useState([]);
+
+        const handleFavorites = (movie) => {
+        setFavorites(prev =>
+        prev.some(fav => fav.id === movie.id)
+        ? prev.filter(fav => fav.id !== movie.id)
+        : [...prev, movie]
+        );
+        
+        };
+
+        const [watchlist, setWatchlist] = useState([]);
+
+        const handleWatchlist = (movie) => {
+        setWatchlist(prev =>
+        prev.some(item => item.id === movie.id)
+            ? prev.filter(item => item.id !== movie.id)
+            : [...prev, movie]
+        );
+        };
+
+
         return (
             <div className="relative w-full max-w-[100vw]">
                         <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}} ref={scrollContainerRef}>
@@ -25,6 +49,25 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
                     <div key={index} className="bg-lightCard transition snap-start scrollbar-hide text-lightTextMuted overflow-y-auto w-28 h-80 md:w-32 rounded hover:scale-105 rounded-b-lg dark:bg-darkCard dark:text-darkTextMuted flex-shrink-0">
                     <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full "/>
                     <div className=" px-2 py-4">
+                    <div className="flex justify-between">
+                        <div className="relative inline-block group">
+                            <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
+        favorites.some(fav => fav.id === movie.id)
+        ? "fa-solid text-red-400"
+        : "fa-regular text-gray-400"
+    }`} onClick={() => handleFavorites(movie)}><FaHeart size={20}/>
+                        </button>
+                        <span className="absolute whitespace-nowrap text-sm absolute bottom-5 left-0 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200">Add to favorites</span>
+                        </div>
+                        <div className="relative inline-block group">
+                        <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
+        watchlist.some(fav => fav.id === movie.id)
+        ? "fa-solid text-blue-400"
+        : "fa-regular text-gray-400"
+    }`} onClick={() => handleWatchlist(movie)}><FaBookmark size={20}/></button>
+                        <span className="absolute whitespace-nowrap text-sm absolute bottom-5 ml-[-96px] py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200">Add to watchlist</span>
+                        </div>
+                    </div>
                     <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
                     <h2 className="text-sm">{movie.release_date}</h2>
                     <h2 className="text-sm">⭐{movie.vote_average}</h2>
