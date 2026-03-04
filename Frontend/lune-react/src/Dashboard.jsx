@@ -19,7 +19,7 @@ function Dashboard({name='Guest'}) {
             try {
                 const token = localStorage.getItem("token")
         if (!token) {
-            navigate('/login')
+            return null
         }
 
         const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/users/dashboard", {
@@ -28,8 +28,11 @@ function Dashboard({name='Guest'}) {
             }
         })
 
-        const data = await response.json()
-        localStorage.setItem("username", data.user.username)
+        if (response.ok) {
+            const data = await response.json()
+            localStorage.setItem("username", data.user.username)
+        }
+        
             } catch (error) {
                 console.log('Error fetching response');
             }
@@ -153,11 +156,6 @@ function Dashboard({name='Guest'}) {
     const getYear = new Date().getFullYear();
 
 
-
-
-
-
-
     return (
         <div className="relative scrollbar-hide
                         bg-lightBg text-lightTextMain h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto">
@@ -175,7 +173,7 @@ function Dashboard({name='Guest'}) {
                     </div>
                         <br />
                     
-                    <NavMenu/>
+                    <NavMenu response={fetchDashboard}/>
 
                     <SearchBar/>
                 </header>
@@ -236,5 +234,3 @@ function Dashboard({name='Guest'}) {
 }
 
 export default Dashboard;
-
-
