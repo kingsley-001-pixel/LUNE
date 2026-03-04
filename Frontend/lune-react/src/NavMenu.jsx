@@ -1,4 +1,4 @@
-import { FaBars, FaSignOutAlt, FaTrash, FaSignInAlt } from "react-icons/fa";
+import { FaBars, FaSignOutAlt, FaTrash, FaHeart, FaBookmark, FaStar } from "react-icons/fa";
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -89,16 +89,37 @@ function NavMenu({response}) {
             navigate('/login')
         }
 
+        const handleFavorites = () => {
+            navigate('/favorites')
+        }
+
+        const handleWatchlist = () => {
+            navigate('/watchlist')
+        }
     return (
         <>        <div id="navBtn" className="show cursor-pointer w-fit rounded-md py-1 px-2 absolute top-7 right-3 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 sm:hidden ml-[350px]">
                                     <FaBars/>
                                 </div>
-                                <ul id="navList" className=" absolute right-0 mt-[-80px] w-40 text-lightTextMain/50 dark:text-darkTextMain/50 bg-lightBg dark:bg-darkBg rounded-md shadow-lg py-1 z-20 space-y-1 sm:z-0 sm:bg-none sm:absolute sm:shadow-none sm:flex sm:gap-5 sm:space-y-0 sm:w-auto sm:mt-0 sm:top-7 sm:right-5 hidden">
-                                        <li><button onClick={toggleTheme} className=" cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Theme {isDark ? (<HiOutlineSun color="#f6f7fb" size={26}className="ml-2"/>) : (<HiOutlineMoon color="#0b0f1a" size={26}className="ml-2"/>)}</button>
+                                <ul id="navList" className=" absolute right-0 mt-[-210px] border w-fit py-4 px-4 text-lightTextMain/50 dark:text-darkTextMain/50 bg-lightBg dark:bg-darkBg rounded-md shadow-lg py-1 z-20 space-y-1 sm:z-0 sm:bg-none sm:absolute sm:shadow-none sm:flex sm:gap-5 sm:space-y-0 sm:w-auto sm:mt-0 sm:top-7 sm:right-5 ">
+                                        <li><button onClick={toggleTheme} className=" cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Theme {isDark ? (<HiOutlineSun color="#f6f7fb" size={20} className="ml-2"/>) : (<HiOutlineMoon color="#0b0f1a" size={26}className="ml-2"/>)}</button>
                             </li>
-                                        {isLoggedIn ? <><li><button onClick={handleLogout} className="  text-red-400 cursor-pointer inline-flex hover:text-red-600 w-full justify-center">Log Out<FaSignOutAlt size={23} className="ml-2"/></button></li>
-                                        <li><button onClick={handleDeleteAccount} className="text-red-400 cursor-pointer inline-flex hover:text-red-600 w-full justify-center">Delete Account<FaTrash size={23} className="ml-2"/></button></li></> : <>
+                                        {isLoggedIn ? 
+                                        <>
+                                        {/* FAVORITES */}
+                                        <li><button onClick={handleFavorites} className="cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Favorites <FaHeart size={20} className="ml-2"/></button></li>
+
+                                        {/* WATCHLIST BUTTON */}
+                                        <li><button onClick={handleWatchlist} className="cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Watchlist <FaBookmark size={20} className="ml-2"/></button></li>
+
+                                        {/* LOGOOUT BUTTON */}
+                                        <li><button onClick={handleLogout} className="  text-red-400 cursor-pointer inline-flex hover:text-red-600 w-full justify-center">Log Out<FaSignOutAlt size={20} className="ml-2"/></button></li>
+                                        <li><button onClick={handleDeleteAccount} className="text-red-400 cursor-pointer inline-flex hover:text-red-600 w-full justify-center">Delete Account<FaTrash size={20} className="ml-2"/></button></li></> 
+                                        : // ELSE 
+                                        <>
+                                        {/* SIGN UP BUTTON */}
                                         <li><button onClick={handleSignUp} className="cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Sign Up</button></li>
+
+                                        {/* LOG IN BUTTON */}
                                         <li><button onClick={handleLogIn} className="cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Log In</button></li>
                                         </> }
                                     </ul>
