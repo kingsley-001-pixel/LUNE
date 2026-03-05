@@ -1,4 +1,5 @@
 import {User} from "../models/user.model.js"
+
 const dashboard = async (req, res) => {
     try {
         const userId = req.user.id
