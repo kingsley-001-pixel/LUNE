@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js"
 const getUserFavorites = async (req, res) => {
     try {
         const user = await User.findById(req.user.id)
-            return res.status(200).json({favorites: user.favorites})
+            return res.status(200).json({message: 'Request successful',favorites: user.favorites})
     } catch (error) {
         return res.status(500).json({message: "Server error", error: error.message})
     }
@@ -11,12 +11,12 @@ const getUserFavorites = async (req, res) => {
 
 const addUserFavorites = async (req, res) => {
     try {
-    const { movieId } = req.body;
+    const { movieId } = req.body
     const user = await User.findById(req.user.id)
     if(!user.favorites.includes(movieId)) {
         user.favorites.push(movieId)
         await user.save()
-        return res.status(201).json({favorites: user.favorites})
+        return res.status(201).json({message: 'Added successfully', favorites: user.favorites})
     }
     } catch (error) {
         return res.status(500).json({message: "Server error", error: error.message})
@@ -25,11 +25,11 @@ const addUserFavorites = async (req, res) => {
 
 const deleteUserFavorites = async (req, res) => {
     try {
-        const { movieId } = req.body;
+        const movieId = req.params.movieId
         const user = await User.findById(req.user.id)
         user.favorites.filter(id => id !== movieId)
         await user.save()
-        return res.status(200).json(user.favorites)
+        return res.status(200).json({message: 'Deleted successfully', favorites: user.favorites})
     } catch (error) {
         return res.status(500).json({message: "Server error", error: error.message})
     }

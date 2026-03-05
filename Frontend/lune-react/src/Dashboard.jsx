@@ -70,7 +70,6 @@ function Dashboard({name='Guest'}) {
         fetchTrendingMovies()
     }, [])
 
-    console.log(trendingMovies)
     // TOP RATED MOVIES FETCH API
     const [topRatedMovies, setTopRatedMovies] = useState([])
         const [topRatedMoviesLoading, setTopRatedMoviesLoading] = useState(false)

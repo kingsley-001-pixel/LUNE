@@ -22,14 +22,80 @@ import { useState } from "react";
 
         const [favorites, setFavorites] = useState([]);
 
-        const handleFavorites = (movie) => {
-        setFavorites(prev =>
-        prev.some(fav => fav.id === movie.id)
-        ? prev.filter(fav => fav.id !== movie.id)
-        : [...prev, movie]
-        );
-        
-        };
+//         const handleFavorites = async (movieId) => {
+//             try {
+//                 const isFavorite = favorites.some(favId => favId === movieId)
+//                 if (isFavorite) {
+//                     setFavorites(prev => prev.filter(favId => favId !== movieId))
+//             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove/${movieId}`, {
+//             method: "DELETE",
+//             headers: {
+//                 Authorization: `Bearer ${token}`,
+//                 "Content-Type": "application/json"
+//     }})
+//             const data = await response.json()
+//             console.log(data)
+//                 } else {
+//                     setFavorites(prev => [...prev, movieId])
+//             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add/${movieId}`, {
+//     method: "POST",
+//     headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json"
+//     }
+// })
+//                     const data = await response.json()
+//                     console.log(data)
+//                     console.log(favorites)
+//                 }
+//             } catch (error) {
+//                 console.log('Error in favorites frontend')
+//             }
+//         }
+
+                const handleFavorites = async (movieId) => {
+  try {
+    const isFavorite = favorites.includes(movieId)
+
+    if (isFavorite) {
+      // Remove from favorites
+      const response = await fetch(
+        "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove",
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ movieId })
+        }
+      )
+
+      const data = await response.json()
+      setFavorites(data.favorites)
+      console.log("Removed:", data.favorites)
+    } else {
+      // Add to favorites
+      const response = await fetch(
+        "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ movieId })
+        }
+      )
+
+      const data = await response.json()
+      setFavorites(data.favorites)
+      console.log("Added:", data.favorites)
+    }
+  } catch (error) {
+    console.log("Error in favorites frontend", error)
+  }
+}
 
         const [watchlist, setWatchlist] = useState([]);
 
@@ -52,16 +118,16 @@ import { useState } from "react";
                     <div className="flex justify-between">
                         <div className="relative inline-block group">
                             <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
-        favorites.some(fav => fav.id === movie.id)
+        favorites.some(favId => favId === movie.id)
         ? "fa-solid text-red-400"
         : "fa-regular text-gray-400"
-    }`} onClick={() => handleFavorites(movie)}><FaHeart size={20}/>
+    }`} onClick={() => handleFavorites(movie.id)}><FaHeart size={20}/>
                         </button>
                         <span className="absolute whitespace-nowrap text-sm absolute bottom-5 left-0 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200">Add to favorites</span>
                         </div>
                         <div className="relative inline-block group">
                         <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
-        watchlist.some(fav => fav.id === movie.id)
+        watchlist.some(watchId => watchId === movie.id)
         ? "fa-solid text-blue-400"
         : "fa-regular text-gray-400"
     }`} onClick={() => handleWatchlist(movie)}><FaBookmark size={20}/></button>

@@ -11,8 +11,8 @@ router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
 router.route('/dashboard').get(authmiddleware, dashboard);
 router.route('/favorites').get(authmiddleware, getUserFavorites)
-router.route('/favorites').post(authmiddleware, addUserFavorites)
-router.route('/favorites/:movieId').delete(authmiddleware, deleteUserFavorites)
+router.route('/favorites/add').post(authmiddleware, addUserFavorites)
+router.route('/favorites/remove/:movieId').delete(authmiddleware, deleteUserFavorites)
 router.route('/watchlist').get(authmiddleware, getUserWatchlist)
 router.route('/watchlist').post(authmiddleware, addUserWatchlist)
 router.route('/watchlist/:movieId').delete(authmiddleware, deleteUserWatchlist)

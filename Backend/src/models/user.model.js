@@ -23,12 +23,14 @@ const userSchema = new Schema ({
         minLength: 8,
         maxLength: 50
     },
-    favorites: [{
-        type: String
-    }],
-    watchlist: [{
-        type: String
-    }]
+    favorites: {
+        type: [Number],
+        default: []
+    },
+    watchlist: {
+        type: [Number],
+        default: []
+    }
 },
 {
     timestamps: true
