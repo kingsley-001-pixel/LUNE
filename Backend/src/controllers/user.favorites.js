@@ -12,13 +12,14 @@ const getUserFavorites = async (req, res) => {
 const addUserFavorites = async (req, res) => {
     try {
     const { movieId } = req.body
-    const user = await User.findById(req.user.id)
-    if(!user.favorites.includes(movieId)) {
-        user.favorites.push(movieId)
-        await user.save()
-        return res.status(201).json({message: 'Added successfully', favorites: user.favorites})
-    }
+    const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            {$addToSet: {favorites: movieId}},
+            {new: true}
+        )
+        return res.status(201).json({message: 'Added successfully', favorites: updatedUser.favorites})
     } catch (error) {
+        console.error(error)
         return res.status(500).json({message: "Server error", error: error.message})
     }
 }
@@ -26,11 +27,22 @@ const addUserFavorites = async (req, res) => {
 const deleteUserFavorites = async (req, res) => {
     try {
         const movieId = req.params.movieId
-        const user = await User.findById(req.user.id)
-        user.favorites.filter(id => id !== movieId)
-        await user.save()
-        return res.status(200).json({message: 'Deleted successfully', favorites: user.favorites})
+        const updatedUser = await User.findByIdAndUpdate(
+        req.user.id,
+        { $pull: {favorites: movieId} },
+        { new: true }
+    )
+
+    if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" })
+    }
+
+    return res.status(200).json({
+        message: "Deleted successfully",
+        favorites: updatedUser.favorites
+    })
     } catch (error) {
+        console.error(error)
         return res.status(500).json({message: "Server error", error: error.message})
     }
 }

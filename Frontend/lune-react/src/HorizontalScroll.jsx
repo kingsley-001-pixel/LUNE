@@ -1,7 +1,7 @@
 import React from "react";
 import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 import { useState } from "react";
-
+const token = localStorage.getItem("token")
 
     const HorizontalScroll = ({sectionApi}) => {
         const scrollContainerRef = React.useRef(null)
@@ -22,80 +22,80 @@ import { useState } from "react";
 
         const [favorites, setFavorites] = useState([]);
 
-//         const handleFavorites = async (movieId) => {
-//             try {
-//                 const isFavorite = favorites.some(favId => favId === movieId)
-//                 if (isFavorite) {
-//                     setFavorites(prev => prev.filter(favId => favId !== movieId))
-//             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove/${movieId}`, {
+        const handleFavorites = async (movieId) => {
+            try {
+                const isFavorite = favorites.some(favId => favId === movieId)
+                if (isFavorite) {
+                    setFavorites(prev => prev.filter(favId => favId !== movieId))
+            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove/${movieId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+    }})
+            const data = await response.json()
+            console.log(data)
+                }               else {
+                    setFavorites(prev => [...prev, movieId])
+            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add`, {
+    method: "POST",
+    headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({movieId})
+})
+                    const data = await response.json()
+                    console.log(data)
+                }
+            } catch (error) {
+                console.log('Error in favorites frontend', error)
+            }
+        }
+
+//                 const handleFavorites = async (movieId) => {
+//     try {
+//     const isFavorite = favorites.includes(movieId)
+//     const token = localStorage.getItem("token")
+//     if (isFavorite) {
+//       // Remove from favorites
+//         const response = await fetch(
+//         "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove/",
+//         {
 //             method: "DELETE",
 //             headers: {
-//                 Authorization: `Bearer ${token}`,
-//                 "Content-Type": "application/json"
-//     }})
-//             const data = await response.json()
-//             console.log(data)
-//                 } else {
-//                     setFavorites(prev => [...prev, movieId])
-//             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add/${movieId}`, {
-//     method: "POST",
-//     headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json"
-//     }
-// })
-//                     const data = await response.json()
-//                     console.log(data)
-//                     console.log(favorites)
-//                 }
-//             } catch (error) {
-//                 console.log('Error in favorites frontend')
-//             }
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify({ movieId })
 //         }
+//         )
 
-                const handleFavorites = async (movieId) => {
-  try {
-    const isFavorite = favorites.includes(movieId)
+//         const data = await response.json()
+//         // setFavorites(data.favorites)
+//         console.log("Removed:", data.favorites)
+//     } else {
+//       // Add to favorites
+//         const response = await fetch(
+//         "http://localhost:5173/api/v1/users/favorites/add",
+//         {
+//             method: "POST",
+//             headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify({ movieId })
+//         }
+//         )
 
-    if (isFavorite) {
-      // Remove from favorites
-      const response = await fetch(
-        "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove",
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ movieId })
-        }
-      )
-
-      const data = await response.json()
-      setFavorites(data.favorites)
-      console.log("Removed:", data.favorites)
-    } else {
-      // Add to favorites
-      const response = await fetch(
-        "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ movieId })
-        }
-      )
-
-      const data = await response.json()
-      setFavorites(data.favorites)
-      console.log("Added:", data.favorites)
-    }
-  } catch (error) {
-    console.log("Error in favorites frontend", error)
-  }
-}
+//         const data = await response.json()
+//         // setFavorites(data.favorites)
+//         console.log("Added:", data)
+//     }
+//     } catch (error) {
+//     console.log("Error in favorites frontend", error)
+//     }
+// }
 
         const [watchlist, setWatchlist] = useState([]);
 
