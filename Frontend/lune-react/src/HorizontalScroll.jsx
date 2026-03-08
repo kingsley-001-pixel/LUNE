@@ -34,7 +34,7 @@ const token = localStorage.getItem("token")
                 "Content-Type": "application/json"
     }})
             const data = await response.json()
-            console.log(data)
+            alert("Removed from favorites")
                 }               else {
                     setFavorites(prev => [...prev, movieId])
             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites/add`, {
@@ -46,14 +46,13 @@ const token = localStorage.getItem("token")
     body: JSON.stringify({movieId})
 })
                     const data = await response.json()
-                    console.log(data)
                 }
             } catch (error) {
                 console.log('Error in favorites frontend', error)
             }
         }
 
-        const getFavorites = async (movieId) => {
+        const getFavorites = async () => {
             try {
                 const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites`, {
             method: "GET",
@@ -87,8 +86,10 @@ const token = localStorage.getItem("token")
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
-    }})
+            }})
             const data = await response.json()
+            console.log(data)
+            alert("Removed from watchlist")
                 }               
                 else {
                     setWatchlist(prev => [...prev, movieId])
@@ -101,13 +102,14 @@ const token = localStorage.getItem("token")
                     body: JSON.stringify({movieId})
                 })
                     const data = await response.json()
+                    console.log(data)
                 }
             } catch (error) {
                 console.log('Error in watchlist frontend', error)
             }
         }
 
-        const getWatchlist = async (movieId) => {
+        const getWatchlist = async () => {
             try {
                 const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/watchlist`, {
             method: "GET",
@@ -158,7 +160,7 @@ const token = localStorage.getItem("token")
         ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
                         </div>
                     </div>
-                    
+
                     <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
                     <h2 className="text-sm">{movie.release_date}</h2>
                     <h2 className="text-sm">⭐{movie.vote_average}</h2>
