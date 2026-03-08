@@ -26,16 +26,12 @@ const addUserFavorites = async (req, res) => {
 
 const deleteUserFavorites = async (req, res) => {
     try {
-        const movieId = req.params.movieId
+        const movieId = Number(req.params.movieId)
         const updatedUser = await User.findByIdAndUpdate(
         req.user.id,
         { $pull: {favorites: movieId} },
         { new: true }
     )
-
-    if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" })
-    }
 
     return res.status(200).json({
         message: "Deleted successfully",
