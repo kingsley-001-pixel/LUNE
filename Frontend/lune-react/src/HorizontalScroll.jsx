@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 import { useState } from "react";
 const token = localStorage.getItem("token")
@@ -53,68 +53,89 @@ const token = localStorage.getItem("token")
             }
         }
 
-//                 const handleFavorites = async (movieId) => {
-//     try {
-//     const isFavorite = favorites.includes(movieId)
-//     const token = localStorage.getItem("token")
-//     if (isFavorite) {
-//       // Remove from favorites
-//         const response = await fetch(
-//         "https://lune-backend-eclm.onrender.com/api/v1/users/favorites/remove/",
-//         {
-//             method: "DELETE",
-//             headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({ movieId })
-//         }
-//         )
+        const getFavorites = async (movieId) => {
+            try {
+                const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/favorites`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+    }})
+            const data = await response.json()
+            const favoriteIds = data.favorites
+            setFavorites(favoriteIds || [])
+            } catch (error) {
+                console.log('Error fetching favorites', error)
+            }
+        }
 
-//         const data = await response.json()
-//         // setFavorites(data.favorites)
-//         console.log("Removed:", data.favorites)
-//     } else {
-//       // Add to favorites
-//         const response = await fetch(
-//         "http://localhost:5173/api/v1/users/favorites/add",
-//         {
-//             method: "POST",
-//             headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({ movieId })
-//         }
-//         )
+        useEffect(() => {
+            getFavorites()
+        }, [])
 
-//         const data = await response.json()
-//         // setFavorites(data.favorites)
-//         console.log("Added:", data)
-//     }
-//     } catch (error) {
-//     console.log("Error in favorites frontend", error)
-//     }
-// }
+
 
         const [watchlist, setWatchlist] = useState([]);
 
-        const handleWatchlist = (movie) => {
-        setWatchlist(prev =>
-        prev.some(item => item.id === movie.id)
-            ? prev.filter(item => item.id !== movie.id)
-            : [...prev, movie]
-        );
-        };
+        const handleWatchlist = async (movieId) => {
+            try {
+                const isWatchlist = watchlist.some(watchId => watchId === movieId)
+                if (isWatchlist) {
+                    setWatchlist(prev => prev.filter(watchId => watchId !== movieId))
+            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/watchlist/remove/${movieId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+    }})
+            const data = await response.json()
+                }               
+                else {
+                    setWatchlist(prev => [...prev, movieId])
+                    const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/watchlist/add`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({movieId})
+                })
+                    const data = await response.json()
+                }
+            } catch (error) {
+                console.log('Error in watchlist frontend', error)
+            }
+        }
+
+        const getWatchlist = async (movieId) => {
+            try {
+                const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/users/watchlist`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+    }})
+            const data = await response.json()
+            const watchlistIds = data.watchlist
+            setWatchlist(watchlistIds || [])
+            } catch (error) {
+                console.log('Error fetching watchlist', error)
+            }
+        }
+
+        useEffect(() => {
+            getWatchlist()
+        }, [])
 
 
         return (
             <div className="relative w-full max-w-[100vw]">
                         <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}} ref={scrollContainerRef}>
-                            {sectionApi.sort((b,a) => a.vote_average - b.vote_average).map((movie, index) => (
+                            {sectionApi.map((movie, index) => (
                     <div key={index} className="bg-lightCard transition snap-start scrollbar-hide text-lightTextMuted overflow-y-auto w-28 h-80 md:w-32 rounded hover:scale-105 rounded-b-lg dark:bg-darkCard dark:text-darkTextMuted flex-shrink-0">
                     <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full "/>
                     <div className=" px-2 py-4">
+
                     <div className="flex justify-between">
                         <div className="relative inline-block group">
                             <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
@@ -123,17 +144,21 @@ const token = localStorage.getItem("token")
         : "fa-regular text-gray-400"
     }`} onClick={() => handleFavorites(movie.id)}><FaHeart size={20}/>
                         </button>
-                        <span className="absolute whitespace-nowrap text-sm absolute bottom-5 left-0 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200">Add to favorites</span>
+                        {favorites.some(favId => favId === movie.id)
+        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200">Added to favorites</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200 ">Add to favorites</span>}
                         </div>
+
                         <div className="relative inline-block group">
                         <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
         watchlist.some(watchId => watchId === movie.id)
         ? "fa-solid text-blue-400"
         : "fa-regular text-gray-400"
-    }`} onClick={() => handleWatchlist(movie)}><FaBookmark size={20}/></button>
-                        <span className="absolute whitespace-nowrap text-sm absolute bottom-5 ml-[-96px] py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-200">Add to watchlist</span>
+    }`} onClick={() => handleWatchlist(movie.id)}><FaBookmark size={20}/></button>
+                        {watchlist.some(watchId => watchId === movie.id)
+        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
                         </div>
                     </div>
+                    
                     <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
                     <h2 className="text-sm">{movie.release_date}</h2>
                     <h2 className="text-sm">⭐{movie.vote_average}</h2>
