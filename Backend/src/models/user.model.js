@@ -21,7 +21,7 @@ const userSchema = new Schema ({
         type: String,
         required: true,
         minLength: 8,
-        maxLength: 50
+        maxLength: 200
     },
     favorites: {
         type: [Number],

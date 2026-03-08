@@ -14,8 +14,8 @@ router.route('/favorites').get(authmiddleware, getUserFavorites)
 router.route('/favorites/add').post(authmiddleware, addUserFavorites)
 router.route('/favorites/remove/:movieId').delete(authmiddleware, deleteUserFavorites)
 router.route('/watchlist').get(authmiddleware, getUserWatchlist)
-router.route('/watchlist').post(authmiddleware, addUserWatchlist)
-router.route('/watchlist/:movieId').delete(authmiddleware, deleteUserWatchlist)
+router.route('/watchlist/add').post(authmiddleware, addUserWatchlist)
+router.route('/watchlist/remove/:movieId').delete(authmiddleware, deleteUserWatchlist)
 
 export default router;
 
