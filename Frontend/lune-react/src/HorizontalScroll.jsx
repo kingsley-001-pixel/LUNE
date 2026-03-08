@@ -157,7 +157,7 @@ const token = localStorage.getItem("token")
         : "fa-regular text-gray-400"
     }`} onClick={() => handleWatchlist(movie.id)}><FaBookmark size={20}/></button>
                         {watchlist.some(watchId => watchId === movie.id)
-        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:absolute group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
+        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
                         </div>
                     </div>
 
@@ -177,3 +177,5 @@ const token = localStorage.getItem("token")
     }
 
 export default HorizontalScroll
+
+// 
