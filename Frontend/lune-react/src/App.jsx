@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard.jsx"
 import Welcome from "./welcome.jsx"
 import GenrePage from "./GenrePage.jsx"
 import Search from "./Search.jsx"
+import Favorites from "./Favorites.jsx"
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="/search/:movieName" element={<Search/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/signup" element={<Signup/>} />
+      <Route path="/favorites" element={<Favorites/>} />
 
     </Routes>
   )

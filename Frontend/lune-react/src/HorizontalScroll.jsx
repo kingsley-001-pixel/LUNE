@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 import { useState } from "react";
-const token = localStorage.getItem("token")
+
 
     const HorizontalScroll = ({sectionApi}) => {
+        const token = localStorage.getItem("token")
         const scrollContainerRef = React.useRef(null)
 
         const scrollLeft = () => {
@@ -88,7 +89,6 @@ const token = localStorage.getItem("token")
                 "Content-Type": "application/json"
             }})
             const data = await response.json()
-            console.log(data)
             alert("Removed from watchlist")
                 }               
                 else {
@@ -102,7 +102,6 @@ const token = localStorage.getItem("token")
                     body: JSON.stringify({movieId})
                 })
                     const data = await response.json()
-                    console.log(data)
                 }
             } catch (error) {
                 console.log('Error in watchlist frontend', error)
@@ -177,5 +176,3 @@ const token = localStorage.getItem("token")
     }
 
 export default HorizontalScroll
-
-// 

@@ -35,7 +35,7 @@ function Search() {
                 
                 })
                 if(!response.ok) {
-                    console.log('Server error');
+                    console.log('Error fetching response');
                     setError(true)
                     setIsShown(false)
                     return;

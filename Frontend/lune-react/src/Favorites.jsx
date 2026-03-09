@@ -4,19 +4,70 @@ import React,{useState, useEffect} from "react"
 function Favorites() {
     
     const [movieIds, setMovieIds] = useState([])
+    const [movies, setMovies] = useState([])
+    const [isFavorite, setIsFavorite] = useState(false)
+    const token = localStorage.getItem("token")
 
     const fetchFavorites = async () => {
         try {
             const response = await fetch("https://lune-backend-eclm.onrender.com/api/v1/users/favorites", {
+            method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
             }
         })
-        console.log(response)
+        const data = await response.json()
+        console.log(data)
+        if (data.favorites.length > 0) {
+            setIsFavorite(true)
+            setMovieIds(data.favorites) }
+        if (data.favorites.length === 0) {
+            setIsFavorite(false) }
         } catch (error) {
             console.log('Error fetching response');
         }
     }
+
+    useEffect(() => {
+        fetchFavorites()
+
+    }, [])
+
+    const [username, setusername] = useState("")
+    const [Username, setUsername] = useState("")
+    useEffect(() => {
+        setusername(localStorage.getItem("username"))
+        username ? setUsername(username.charAt(0).toUpperCase() + username.slice(1)) : ''
+    }, [username])
+    
+    // GETTING CURRENT YEAR
+    const getYear = new Date().getFullYear();
+
+    
+
+    useEffect(() => {
+        movieIds.forEach((movieId) => {
+        if (movieIds.length > 0) {
+        const fetchMovies = async () => {
+            try {
+                const response = await fetch('https://lune-backend-eclm.onrender.com/api/v1/tmdb/searchbyid', {
+                    method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ movieId: movieId })
+                })
+                if(!response.ok) {
+                    console.log('Error fetching response');
+                    return; }
+                const data = await response.json()
+                console.log(data)
+                fetchMovies()
+            } catch (error) {
+                console.log('Error fetching movie data');
+            }
+        }}
+    })
+    }, [movieIds])
 
     return (
         <div className="relative scrollbar-hide
@@ -34,9 +85,29 @@ function Favorites() {
                         <h1 className="text-3xl md:text-4xl"> {Username || name}</h1>
                     </div>
                         <br />
-                    
-                    <NavMenu response={fetchDashboard}/>
+                    <NavMenu />
                 </header>
+
+                <div className="flex flex-col gap-5 justify-center items-center">
+                    <h1 className="text-3xl font-bold">Your Favorites</h1>
+                    {isFavorite ? (
+                        <div className="grid grid-cols-2 gap-12 py-2 px-4 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 md:mr-5">
+                            {movies.map((movieId, index) => (
+                                <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
+                                    <img src={`https://image.tmdb.org/t/p/w500${movieId.posterPath}`} alt={movieId.title} className="w-full h-full object-cover rounded rounded-b-lg"/>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>You have no favorite movies yet. Start exploring and add some to your favorites!</p>
+                    )}
+                    </div>
+
+                <footer className="flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
+                        <p className="text-center">Data provided by <a href="https://www.themoviedb.org/" className="underline hover:text-lightTextMuted">TMBD</a>
+                        </p>
+                        <p className="text-center">&copy;{getYear} Lune. All rights reserved.</p>
+                    </footer>
                 </div>
                 </div>
     )

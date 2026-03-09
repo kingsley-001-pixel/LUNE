@@ -172,7 +172,7 @@ function Dashboard({name='Guest'}) {
                     </div>
                         <br />
                     
-                    <NavMenu response={fetchDashboard}/>
+                    <NavMenu/>
 
                     <SearchBar/>
                 </header>
