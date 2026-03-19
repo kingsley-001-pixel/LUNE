@@ -19,6 +19,25 @@ const getSearch = async (req, res) => {
     }
 }
 
+const getSearchById = async (req, res) => {
+    try {
+        const { query } = Number(req.query)
+        const apiResponse = await fetch(`https://api.themoviedb.org/3/movie/${query}?api_key=${apiKey}`)
+
+        if (!apiResponse.ok) {
+            const errorData = await apiResponse.json();
+            return res.status(apiResponse.status).json({
+                message: `TMDB Error: ${errorData.status_message}`,
+            });
+        }
+        
+        const data = await apiResponse.json();
+        return res.status(200).json({ message: "Success", data});
+    } catch (error) {
+        return res.status(500).json({message: "Internal server error", error: error.message})
+    }
+}
+
 const getGenre = async (req, res) => {
     try {
         const { genre, pageNumber } = req.body;
@@ -141,6 +160,7 @@ const getWestern = async (req, res) => {
 
 export {
             getSearch,
+            getSearchById,
             getGenre,
             getTopRated,
             getUpcoming,

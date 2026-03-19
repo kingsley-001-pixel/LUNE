@@ -43,7 +43,7 @@ const loginUser = async (req, res) => {
         const isMatched = await user.comparePassword(password)
 
         if (!isMatched) {
-            return res.status(400).json({message: "Invalid credentials!"})
+            return res.status(400).json({message: "Invalid credentials!", error: error})
         }
 
         const token = jwt.sign(

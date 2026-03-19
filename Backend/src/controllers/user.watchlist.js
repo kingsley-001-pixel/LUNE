@@ -39,7 +39,7 @@ const deleteUserWatchlist = async (req, res) => {
     })
     } catch (error) {
         console.error(error)
-        return res.status(500).json({message: "Server error", error: error.message})
+        return res.status(500).json({message: "Server error", error: error.message, params: req.params, body: req.body})
     }
 }
 

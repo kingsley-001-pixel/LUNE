@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getChinese, getGenre, getJapanese, getKorean, getSearch, getTopRated, getTrending, getUpcoming, getWestern } from "../controllers/tmdb.controller.js";
+import { getChinese, getGenre, getJapanese, getKorean, getSearch, getSearchById, getTopRated, getTrending, getUpcoming, getWestern } from "../controllers/tmdb.controller.js";
 
 const router = Router()
 
 router.route('/search').post(getSearch)
+router.route('/searchbyid').get(getSearchById)
 router.route('/genre').post(getGenre)
 router.route('/top-rated').get(getTopRated)
 router.route('/upcoming').get(getUpcoming)
