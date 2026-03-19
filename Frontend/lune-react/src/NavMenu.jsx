@@ -1,8 +1,7 @@
-import { FaBars, FaSignOutAlt, FaTrash, FaHeart, FaBookmark } from "react-icons/fa";
+import { FaBars, FaSignOutAlt, FaTrash, FaHeart, FaBookmark, FaHome } from "react-icons/fa";
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import Dashboard from "./Dashboard";
 
 function NavMenu() {
     const navigate = useNavigate()
@@ -96,12 +95,18 @@ function NavMenu() {
         const handleWatchlist = () => {
             navigate('/watchlist')
         }
+
+        const handleMenu = () => {
+            navigate('/dashboard')
+        }
     return (
         <>
         <div id="navBtn" className="show cursor-pointer w-fit rounded-md py-1 px-2 absolute top-7 right-3 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 sm:hidden ml-[350px]">
             <FaBars/>
         </div>
-            <ul id="navList" className=" absolute right-0 top-0 border w-fit py-4 px-4 text-lightTextMain/50 dark:text-darkTextMain/50 bg-lightBg dark:bg-darkBg rounded-md shadow-lg py-1 z-20 space-y-1 sm:z-0 sm:bg-none sm:absolute sm:shadow-none sm:flex sm:gap-5 sm:space-y-0 sm:w-auto sm:mt-0 sm:top-7 sm:right-5 hidden">
+            <ul id="navList" className=" absolute right-0 top-0 border w-fit py-4 px-4 text-lightTextMain/50 dark:text-darkTextMain/50 bg-lightBg dark:bg-darkBg rounded-md shadow-l z-20 space-y-1 sm:z-0 sm:bg-none sm:absolute sm:shadow-none sm:flex sm:gap-5 sm:space-y-0 sm:w-auto sm:mt-0 sm:top-7 sm:right-5 hidden">
+                <li><button onClick={handleMenu} className="cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Menu <FaHome size={20} className="ml-2"/></button></li>
+
                 <li><button onClick={toggleTheme} className=" cursor-pointer inline-flex w-full justify-center md:hover:bg-none hover:text-lightTextMain dark:hover:text-darkTextMain">Theme {isDark ? (<HiOutlineSun color="#f6f7fb" size={20} className="ml-2"/>) : (<HiOutlineMoon color="#0b0f1a" size={26}className="ml-2"/>)}</button>
                 </li>
                 {isLoggedIn ? 

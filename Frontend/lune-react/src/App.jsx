@@ -7,6 +7,7 @@ import Welcome from "./welcome.jsx"
 import GenrePage from "./GenrePage.jsx"
 import Search from "./Search.jsx"
 import Favorites from "./Favorites.jsx"
+import Watchlist from "./Watchlist.jsx"
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login/>} />
       <Route path="/signup" element={<Signup/>} />
       <Route path="/favorites" element={<Favorites/>} />
-
+      <Route path="/watchlist" element={<Watchlist/>} />
     </Routes>
   )
 }
