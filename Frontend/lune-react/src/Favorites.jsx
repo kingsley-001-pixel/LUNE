@@ -34,6 +34,7 @@ function Favorites() {
 
     }, [])
 
+    // GETTING AND CAPITALIZING USERNAME
     const [username, setusername] = useState("")
     const [Username, setUsername] = useState("")
     useEffect(() => {
@@ -45,28 +46,26 @@ function Favorites() {
     const getYear = new Date().getFullYear();
 
     
-
+    // GETTING FAVORITE MOVIES
     useEffect(() => {
-        movieIds.forEach((movieId) => {
-        if (movieIds.length > 0) {
-        const fetchMovies = async () => {
+        const fetchMovies = async (id) => {
             try {
-                const response = await fetch('https://lune-backend-eclm.onrender.com/api/v1/tmdb/searchbyid', {
-                    method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ movieId: movieId })
-                })
-                if(!response.ok) {
-                    console.log('Error fetching response');
-                    return; }
+                const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/searchbyid?query=${id}`)
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.error(`Movie fetch failed: ${error.message}`);
+                    return;
+                    }
                 const data = await response.json()
                 console.log(data)
-                fetchMovies()
             } catch (error) {
                 console.log('Error fetching movie data');
             }
-        }}
-    })
+        }
+
+        movieIds.forEach((id) => {
+            fetchMovies(id)
+        })
     }, [movieIds])
 
     return (

@@ -21,6 +21,14 @@ import { useState } from "react";
             })
         }
 
+        const [isLoggedIn, setIsLoggedIn] = useState(false)
+        useEffect(() => {
+            if (token) {
+                setIsLoggedIn(true)
+            } else {
+                setIsLoggedIn(false)
+            }
+        }, [])
         const [favorites, setFavorites] = useState([]);
 
         const handleFavorites = async (movieId) => {
@@ -47,7 +55,7 @@ import { useState } from "react";
     body: JSON.stringify({movieId})
 })
                     const data = await response.json()
-                }
+                } 
             } catch (error) {
                 console.log('Error in favorites frontend', error)
             }
@@ -128,6 +136,14 @@ import { useState } from "react";
             getWatchlist()
         }, [])
 
+        const handleWarning = (type) => {
+            if(type === 'favorites') {
+                alert("Please log in to add to favorites")
+            } else if (type === 'watchlist') {
+                alert("Please log in to add to watchlist")
+            }
+        }
+
 
         return (
             <div className="relative w-full max-w-[100vw]">
@@ -143,7 +159,7 @@ import { useState } from "react";
         favorites.some(favId => favId === movie.id)
         ? "fa-solid text-red-400"
         : "fa-regular text-gray-400"
-    }`} onClick={() => handleFavorites(movie.id)}><FaHeart size={20}/>
+    }`} onClick={isLoggedIn ? () => handleFavorites(movie.id) : () => handleWarning('favorites')}><FaHeart size={20}/>
                         </button>
                         {favorites.some(favId => favId === movie.id)
         ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200">Added to favorites</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200 ">Add to favorites</span>}
@@ -154,7 +170,7 @@ import { useState } from "react";
         watchlist.some(watchId => watchId === movie.id)
         ? "fa-solid text-blue-400"
         : "fa-regular text-gray-400"
-    }`} onClick={() => handleWatchlist(movie.id)}><FaBookmark size={20}/></button>
+    }`} onClick={isLoggedIn ? () => handleWatchlist(movie.id) : () => handleWarning('watchlist')}><FaBookmark size={20}/></button>
                         {watchlist.some(watchId => watchId === movie.id)
         ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
                         </div>

@@ -110,41 +110,57 @@ function VerticalScroll({Movies}) {
                     getWatchlist()
                 }, [])
 
+                const [isLoggedIn, setIsLoggedIn] = useState(false)
+                        useEffect(() => {
+                            if (token) {
+                                setIsLoggedIn(true)
+                            } else {
+                                setIsLoggedIn(false)
+                            }
+                        }, [])
+                const handleWarning = (type) => {
+            if(type === 'favorites') {
+                alert("Please log in to add to favorites")
+            } else if (type === 'watchlist') {
+                alert("Please log in to add to watchlist")
+            }
+        }
+
     return(
         <div className="grid grid-cols-2 gap-12 py-2 px-4 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 md:mr-5">
-                    {Movies.map((movie, index) => (
-                        <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
-                            <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full h-52 object-cover"/>
-                            <div id="movieContent" className=" px-2 py-4">
-                                <div className="flex justify-between">
-                                                        <div className="relative inline-block group">
-                                                            <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
-                                        favorites.some(favId => favId === movie.id)
-                                        ? "fa-solid text-red-400"
-                                        : "fa-regular text-gray-400"
-                                    }`} onClick={() => handleFavorites(movie.id)}><FaHeart size={20}/>
-                                                        </button>
-                                                        {favorites.some(favId => favId === movie.id)
-                                        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200">Added to favorites</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200 ">Add to favorites</span>}
-                                                        </div>
-                                
-                                                        <div className="relative inline-block group">
-                                                        <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
-                                        watchlist.some(watchId => watchId === movie.id)
-                                        ? "fa-solid text-blue-400"
-                                        : "fa-regular text-gray-400"
-                                    }`} onClick={() => handleWatchlist(movie.id)}><FaBookmark size={20}/></button>
-                                                        {watchlist.some(watchId => watchId === movie.id)
-                                        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
-                                                        </div>
-                                                    </div>
-                                <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
-                                <h2>{movie.release_date}</h2>
-                                <h2>⭐{movie.vote_average}</h2>
-                                <p className="mb-2 ">{movie.overview}</p>
+            {Movies.map((movie, index) => (
+                <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
+                    <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full h-52 object-cover"/>
+                    <div id="movieContent" className=" px-2 py-4">
+                        <div className="flex justify-between">
+                            <div className="relative inline-block group">
+                                <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
+                                favorites.some(favId => favId === movie.id)
+                                ? "fa-solid text-red-400"
+                                : "fa-regular text-gray-400"
+                            }`} onClick={isLoggedIn ? () => handleFavorites(movie.id) : () => handleWarning('favorites')}><FaHeart size={20}/>
+                                </button>
+                                {favorites.some(favId => favId === movie.id)
+                                ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200">Added to favorites</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 rounded-md hidden group-hover:block group-hover:transition-all group-hover:duration-200 ">Add to favorites</span>}
                             </div>
+
+                            <div className="relative inline-block group">
+                                <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
+                                watchlist.some(watchId => watchId === movie.id)
+                                ? "fa-solid text-blue-400"
+                                : "fa-regular text-gray-400"
+                            }`} onClick={isLoggedIn ? () => handleWatchlist(movie.id) : () => handleWarning('watchlist')}><FaBookmark size={20}/></button>
+                                {watchlist.some(watchId => watchId === movie.id)
+                                ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
+                                </div>
                         </div>
-                    ))}
+                        <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
+                        <h2>{movie.release_date}</h2>
+                        <h2>⭐{movie.vote_average}</h2>
+                        <p className="mb-2 ">{movie.overview}</p>
+                    </div>
+                </div>
+            ))}
                 </div>
     )
 }
