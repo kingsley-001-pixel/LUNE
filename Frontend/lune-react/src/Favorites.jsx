@@ -1,6 +1,7 @@
 import NavMenu from "./NavMenu.jsx"
 import { HiOutlineUser } from "react-icons/hi2"
 import React,{useState, useEffect} from "react"
+import { data } from "react-router"
 function Favorites() {
     
     const [movieIds, setMovieIds] = useState([])
@@ -56,10 +57,10 @@ function Favorites() {
                     console.error(`Movie fetch failed: ${error.message}`);
                     return;
                     }
-                const data = await response.json()
-                console.log(data)
+                // const data = await response.json()
+                console.log(response)
             } catch (error) {
-                console.log('Error fetching movie data');
+                console.log('Error fetching movie data', error);
             }
         }
 
