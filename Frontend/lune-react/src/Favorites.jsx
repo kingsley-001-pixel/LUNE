@@ -57,8 +57,8 @@ function Favorites() {
                     console.error(`Movie fetch failed: ${error.message}`);
                     return;
                     }
-                // const data = await response.json()
-                console.log(response)
+                const data = await response.json()
+                console.log(data)
             } catch (error) {
                 console.log('Error fetching movie data', error);
             }
