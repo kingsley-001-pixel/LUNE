@@ -1,7 +1,7 @@
 import NavMenu from "./NavMenu.jsx"
 import { HiOutlineUser } from "react-icons/hi2"
-import React,{useState, useEffect} from "react"
-import { data } from "react-router"
+import {useState, useEffect} from "react"
+import VerticalScroll from "./VerticalScroll.jsx"
 function Favorites() {
     
     const [movieIds, setMovieIds] = useState([])
@@ -58,7 +58,11 @@ function Favorites() {
                     return;
                     }
                 const data = await response.json()
-                console.log(data)
+                setMovies(prevMovies => {
+                const updated = [...prevMovies, data.data];
+                console.log(updated);
+                return updated;
+            })
             } catch (error) {
                 console.log('Error fetching movie data', error);
             }
@@ -90,16 +94,8 @@ function Favorites() {
 
                 <div className="flex flex-col gap-5 justify-center items-center">
                     <h1 className="text-3xl font-bold">Your Favorites</h1>
-                    {isFavorite ? (
-                        <div className="grid grid-cols-2 gap-12 py-2 px-4 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 md:mr-5">
-                            {movies.map((movieId, index) => (
-                                <div key={index} className="bg-lightCard  overflow-y-auto overflow-x-hidden transition h-80 text-lightTextMuted w-40 hover:scale-105 scrollbar-hide dark:bg-darkCard dark:text-darkTextMuted rounded rounded-b-lg">
-                                    <img src={`https://image.tmdb.org/t/p/w500${movieId.posterPath}`} alt={movieId.title} className="w-full h-full object-cover rounded rounded-b-lg"/>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>You have no favorite movies yet. Start exploring and add some to your favorites!</p>
+                    {isFavorite ? (<VerticalScroll Movies={movies}/>) : (
+                        <p className="px-4">You have no favorite movies yet. Start exploring and add some to your favorites!</p>
                     )}
                     </div>
 
