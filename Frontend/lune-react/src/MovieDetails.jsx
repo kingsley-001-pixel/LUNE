@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { HiOutlineUser } from "react-icons/hi"
 import NavMenu from "./NavMenu.jsx";
 import SearchBar from "./SearchBar.jsx";
 import HorizontalScroll from "./HorizontalScroll.jsx";
@@ -11,15 +10,14 @@ function MovieDetails() {
     const token = localStorage.getItem("token")
     const [movieDetails, setMovieDetails] = useState({})
     const [error, setError] = useState(null)
-    const { movieId } = useParams()
-    const [username, setusername] = useState("")
-    const [Username, setUsername] = useState("")
-    const name = localStorage.getItem("username")
+    const { id } = useParams()
     const getYear = new Date().getFullYear()
+
+    
 
     const fetchMovieDetails = async () => {
         try {
-            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie/${movieId}`)
+            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie/?query=${id}`)
             if (!response.ok) {
                 throw new Error("Failed to fetch movie details")
             }
@@ -30,20 +28,9 @@ function MovieDetails() {
         }
     }
     useEffect(() => {
+        console.log(id)
         fetchMovieDetails()
-    }, [movieId])
-        useEffect(() => {
-            if (token) {
-                setUsername(true)
-            } else {setUsername(false)
-            }
-        }, [token])
-
-    // GETTING USERNAME AND CAPITALIZING THE FIRST LETTER
-        useEffect(() => {
-            setusername(localStorage.getItem("username"))
-            username ? setUsername(username.charAt(0).toUpperCase() + username.slice(1)) : ''
-        }, [username])
+    }, [id])
 
     return (
         <div>Hi</div>

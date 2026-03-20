@@ -122,6 +122,7 @@ const getJapanese = async (req, res) => {
         
     }
 }
+
 const getChinese = async (req, res) => {
     try {
         const apiResponse = await fetch (`https://api.themoviedb.org/3/discover/movie?with_original_language=zh&sort_by=popularity.desc&vote_count.gte=50`, {
@@ -153,16 +154,16 @@ const getWestern = async (req, res) => {
 }
 
 const getMovieFullDetails = async (req, res) => {
-    const id = req.params.id;
+    const { query } = req.query;
 
     try {
     const [details, credits, videos, similar] = await Promise.all([
-        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`).then(r => r.json()),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`).then(r => r.json()),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`).then(r => r.json()),
-        fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${query}?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${query}/credits?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${query}/videos?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${query}/similar?api_key=${apiKey}`).then(r => r.json()),
     ]);
-
+id
     const trailer = videos.results.find(
         v => v.type === "Trailer" && v.site === "YouTube"
     );
