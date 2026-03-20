@@ -13,6 +13,6 @@ router.route('/korean').get(getKorean)
 router.route('/japanese').get(getJapanese)
 router.route('/chinese').get(getChinese)
 router.route('/western').get(getWestern)
-router.route('/movie/:id').get(getMovieFullDetails)
+router.route('/movie').get(getMovieFullDetails)
 
 export default router;
