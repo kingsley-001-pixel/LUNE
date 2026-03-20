@@ -17,7 +17,7 @@ function MovieDetails() {
 
     const fetchMovieDetails = async () => {
         try {
-            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie/?query=${id}`)
+            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie?query=${id}`)
             if (!response.ok) {
                 throw new Error("Failed to fetch movie details")
             }
