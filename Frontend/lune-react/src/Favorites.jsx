@@ -75,7 +75,7 @@ function Favorites() {
 
     return (
         <div className="relative scrollbar-hide
-                        bg-lightBg text-lightTextMain h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto">
+                        bg-lightBg text-lightTextMain h-screen dark:bg-darkBg dark:text-darkTextMain box-border font-roboto overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-col gap-2 justify-center items-center">
                 
                 <header className=" w-full mt-0 pt-0">

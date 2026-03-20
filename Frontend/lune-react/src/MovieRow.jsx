@@ -31,7 +31,6 @@ function MovieRow({title, fetchUrl}) {
     }, [fetchUrl])
 
     return(
-        
         <div>
             <h2 className="text-2xl font-semibold tracking-wide md:text-3xl text-left ml-2 mt-4 mb-[-10px]">{title}</h2>
             {<HorizontalScroll sectionApi={movies}/>}
