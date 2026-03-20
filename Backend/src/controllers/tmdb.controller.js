@@ -155,7 +155,6 @@ const getWestern = async (req, res) => {
 
 const getMovieFullDetails = async (req, res) => {
     const { query } = req.query;
-
     try {
     const [details, credits, videos, similar] = await Promise.all([
         fetch(`https://api.themoviedb.org/3/movie/${query}?api_key=${apiKey}`).then(r => r.json()),

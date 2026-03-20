@@ -19,8 +19,10 @@ function MovieDetails() {
         try {
             const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie?query=${id}`)
             if (!response.ok) {
-                throw new Error("Failed to fetch movie details")
-            }
+                    const error = await response.json();
+                    console.error(`Movie Details fetch failed: ${error.message}`);
+                    return;
+                    }
             const data = await response.json()
             setMovieDetails(data.data)
         } catch (error) {
