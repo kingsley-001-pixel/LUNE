@@ -25,8 +25,10 @@ function MovieDetails() {
                     }
             const data = await response.json()
             setMovieDetails(data.data)
+            console.log(data)
         } catch (error) {
             setError(error.message)
+            console.log('Error fetching movie data', error);
         }
     }
     useEffect(() => {
