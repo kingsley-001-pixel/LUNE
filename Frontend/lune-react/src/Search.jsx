@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi"
-import { Link } from "react-router-dom";
 import { FaHome, FaSpinner, FaSearch } from "react-icons/fa";
 import ScrollToTop from "./ScrollToTop.jsx";
 import SearchBar from "./SearchBar.jsx";

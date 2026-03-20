@@ -58,7 +58,6 @@ function Watchlist() {
                 const data = await response.json()
                 setMovies(prevMovies => {
                 const updated = [...prevMovies, data.data];
-                console.log(updated);
                 return updated;
             })
             } catch (error) {

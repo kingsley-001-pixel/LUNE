@@ -19,7 +19,6 @@ function Favorites() {
             }
         })
         const data = await response.json()
-        console.log(data)
         if (data.favorites.length > 0) {
             setIsFavorite(true)
             setMovieIds(data.favorites) }
@@ -60,7 +59,6 @@ function Favorites() {
                 const data = await response.json()
                 setMovies(prevMovies => {
                 const updated = [...prevMovies, data.data];
-                console.log(updated);
                 return updated;
             })
             } catch (error) {

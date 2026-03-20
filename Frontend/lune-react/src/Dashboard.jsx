@@ -8,11 +8,6 @@ import SearchBar from "./SearchBar.jsx"
 import NavMenu from "./NavMenu.jsx"
 
 function Dashboard({name='Guest'}) {
-
-    const [username, setusername] = useState("")
-    const [Username, setUsername] = useState("")
-    const navigate = useNavigate()
-    
         const fetchDashboard = async () => {
             try {
                 const token = localStorage.getItem("token")
@@ -126,6 +121,8 @@ function Dashboard({name='Guest'}) {
     }, [])
 
     // GETTING USERNAME AND CAPITALIZING THE FIRST LETTER
+    const [username, setusername] = useState("")
+    const [Username, setUsername] = useState("")
     useEffect(() => {
         setusername(localStorage.getItem("username"))
         username ? setUsername(username.charAt(0).toUpperCase() + username.slice(1)) : ''

@@ -136,6 +136,7 @@ const getChinese = async (req, res) => {
         
     }
 }
+
 const getWestern = async (req, res) => {
     try {
         const apiResponse = await fetch (`https://api.themoviedb.org/3/discover/movie?with_original_language=en&sort_by=popularity.desc&vote_count.gte=50`, {
@@ -151,6 +152,33 @@ const getWestern = async (req, res) => {
     }
 }
 
+const getMovieFullDetails = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+    const [details, credits, videos, similar] = await Promise.all([
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`).then(r => r.json()),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${apiKey}`).then(r => r.json()),
+    ]);
+
+    const trailer = videos.results.find(
+        v => v.type === "Trailer" && v.site === "YouTube"
+    );
+
+    res.json({
+        details,
+        cast: credits.cast.slice(0, 6),
+        trailer: trailer || null,
+        similar: similar.results.slice(0, 10)
+    });
+
+    } catch (err) {
+    res.status(500).json({ message: "Error fetching movie data" });
+    }
+};
+
 export {
             getSearch,
             getSearchById,
@@ -161,5 +189,6 @@ export {
             getKorean,
             getJapanese,
             getChinese,
-            getWestern
+            getWestern,
+            getMovieFullDetails
         }

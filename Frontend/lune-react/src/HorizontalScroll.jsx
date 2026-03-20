@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 
     const HorizontalScroll = ({sectionApi}) => {
+        const navigate = useNavigate()
         const token = localStorage.getItem("token")
         const scrollContainerRef = React.useRef(null)
 
@@ -81,8 +84,6 @@ import { useState } from "react";
             getFavorites()
         }, [])
 
-
-
         const [watchlist, setWatchlist] = useState([]);
 
         const handleWatchlist = async (movieId) => {
@@ -136,6 +137,10 @@ import { useState } from "react";
             getWatchlist()
         }, [])
 
+        const handleMovieDetails = (movieId) => {
+            navigate(`/movie/${movieId}`)
+        }
+
         const handleWarning = (type) => {
             if(type === 'favorites') {
                 alert("Please log in to add to favorites")
@@ -147,12 +152,12 @@ import { useState } from "react";
 
         return (
             <div className="relative w-full max-w-[100vw]">
-                        <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}} ref={scrollContainerRef}>
-                            {sectionApi.map((movie, index) => (
+                <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}} ref={scrollContainerRef}>
+                    {sectionApi.map((movie, index) => (
                     <div key={index} className="bg-lightCard transition snap-start scrollbar-hide text-lightTextMuted overflow-y-auto w-28 h-80 md:w-32 rounded hover:scale-105 rounded-b-lg dark:bg-darkCard dark:text-darkTextMuted flex-shrink-0">
-                    <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full "/>
+                    <Link to={`/movie/${movie.id}`}><img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full "/></Link>
+                    
                     <div className=" px-2 py-4">
-
                     <div className="flex justify-between">
                         <div className="relative inline-block group">
                             <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${

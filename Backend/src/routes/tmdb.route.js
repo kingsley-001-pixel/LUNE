@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getChinese, getGenre, getJapanese, getKorean, getSearch, getSearchById, getTopRated, getTrending, getUpcoming, getWestern } from "../controllers/tmdb.controller.js";
+import { getChinese, getGenre, getJapanese, getKorean, getSearch, getSearchById, getTopRated, getTrending, getUpcoming, getWestern, getMovieFullDetails } from "../controllers/tmdb.controller.js";
 
 const router = Router()
 
@@ -13,5 +13,6 @@ router.route('/korean').get(getKorean)
 router.route('/japanese').get(getJapanese)
 router.route('/chinese').get(getChinese)
 router.route('/western').get(getWestern)
+router.route('/movie/:id').get(getMovieFullDetails)
 
 export default router;
