@@ -137,9 +137,6 @@ import { Link } from "react-router-dom";
             getWatchlist()
         }, [])
 
-        const handleMovieDetails = (movieId) => {
-            navigate(`/movie/${movieId}`)
-        }
 
         const handleWarning = (type) => {
             if(type === 'favorites') {

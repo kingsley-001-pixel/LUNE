@@ -24,7 +24,7 @@ function MovieDetails() {
                     return;
                     }
             const data = await response.json()
-            setMovieDetails(data.data)
+            setMovieDetails(data)
             console.log(data)
         } catch (error) {
             setError(error.message)
