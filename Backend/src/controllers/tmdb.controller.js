@@ -155,7 +155,10 @@ const getWestern = async (req, res) => {
 
 const getMovieFullDetails = async (req, res) => {
     const { query } = req.query;
-    if (!query) return res.status(400).json({ message: "Movie ID required" });
+
+    if (!query) {
+    return res.status(400).json({ message: "Movie ID required" });
+    }
 
     try {
     const [details, credits, videos, similar] = await Promise.all([
@@ -167,17 +170,27 @@ const getMovieFullDetails = async (req, res) => {
 
     const videoResults = videos.results || [];
     let mainVideo = videoResults.find(v => v.type === "Trailer" && v.site === "YouTube");
-    if (!mainVideo) mainVideo = videoResults.find(v => v.type === "Teaser" && v.site === "YouTube");
+
+    if (!mainVideo) {
+        mainVideo = videoResults.find(v => v.type === "Teaser" && v.site === "YouTube");
+    }
+
+    const cast = credits.cast ? credits.cast.slice(0, 6) : [];
+    const similarMovies = similar.results ? similar.results.slice(0, 10) : [];
 
     res.json({
         details,
-        cast: credits.cast ? credits.cast.slice(0,6) : [],
+        cast,
         trailer: mainVideo || null,
-        similar: similar.results ? similar.results.slice(0,10) : []
+        similar: similarMovies
     });
+
     } catch (err) {
-    console.error("Movie fetch error:", err.message);
-    res.status(500).json({ message: "Error fetching movie data" });
+    console.error("FULL ERROR:", err); // 👈 DEBUG
+    res.status(500).json({ 
+        message: "Error fetching movie data",
+        error: err.message 
+    });
     }
 };
 
