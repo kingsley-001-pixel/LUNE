@@ -5,25 +5,8 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 
-    const HorizontalScroll = ({sectionApi}) => {
-        const navigate = useNavigate()
+    const MovieView = ({sectionApi}) => {
         const token = localStorage.getItem("token")
-        const scrollContainerRef = React.useRef(null)
-
-        const scrollLeft = () => {
-            scrollContainerRef.current.scrollBy({
-                left: -380,
-                behavior: "smooth"
-            })
-        }
-
-        const scrollRight = () => {
-            scrollContainerRef.current.scrollBy({
-                left: 380,
-                behavior: "smooth"
-            })
-        }
-
         const [isLoggedIn, setIsLoggedIn] = useState(false)
         useEffect(() => {
             if (token) {
@@ -32,6 +15,7 @@ import { Link } from "react-router-dom";
                 setIsLoggedIn(false)
             }
         }, [])
+
         const [favorites, setFavorites] = useState([]);
 
         const handleFavorites = async (movieId) => {
@@ -149,13 +133,11 @@ import { Link } from "react-router-dom";
 
         return (
             <div className="relative w-full max-w-[100vw]">
-                <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}} ref={scrollContainerRef}>
-                    {sectionApi.map((movie, index) => (
-                    <div key={index} className="bg-lightCard transition snap-start scrollbar-hide text-lightTextMuted overflow-y-auto w-28 h-80 md:w-32 rounded hover:scale-105 rounded-b-lg dark:bg-darkCard dark:text-darkTextMuted flex-shrink-0">
-                    <Link to={`/movie/${movie.id}`}><img src={movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={movie.title} className="rounded-lg w-full "/></Link>
+                <div className="flex overflow-x-auto whitespace-wrap scrollbar-hide py-4 px-2 gap-4" style={{WebkitOverflowScrolling: 'touch'}}>
+                    {<div className="bg-lightCard transition snap-start scrollbar-hide text-lightTextMuted overflow-y-auto w-28 h-80 md:w-32 rounded hover:scale-105 rounded-b-lg dark:bg-darkCard dark:text-darkTextMuted flex-shrink-0">
+                    <img src={sectionApi.poster_path ? `https://image.tmdb.org/t/p/w200${sectionApi.poster_path}` :  `https://via.placeholder.com/300x450?text=No+Image`} alt={sectionApi.title} className="rounded-lg w-full "/>
                     
                     <div className=" px-2 py-4">
-                    <div className="flex justify-between">
                         <div className="relative inline-block group">
                             <button key={movie.id} id="addToFavoritesBtn" className={`fa-heart cursor-pointer transition-colors duration-200 ${
         favorites.some(favId => favId === movie.id)
@@ -163,34 +145,18 @@ import { Link } from "react-router-dom";
         : "fa-regular text-gray-400"
     }`} onClick={isLoggedIn ? () => handleFavorites(movie.id) : () => handleWarning('favorites')}><FaHeart size={20}/>
                         </button>
-                        {favorites.some(favId => favId === movie.id)
-        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 hidden group-hover:block group-hover:transition-all group-hover:duration-200">Added to favorites</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:left-0 group-hover:py-1 hidden group-hover:block group-hover:transition-all group-hover:duration-200 ">Add to favorites</span>}
-        </div>
-
-        <div className="relative inline-block group">
-        <button id="addToWatchlistBtn" key={movie.id} className={`fa-bookmark cursor-pointer transition-colors duration-200 ${
-        watchlist.some(watchId => watchId === movie.id)
-        ? "fa-solid text-blue-400"
-        : "fa-regular text-gray-400"
-    }`} onClick={isLoggedIn ? () => handleWatchlist(movie.id) : () => handleWarning('watchlist')}><FaBookmark size={20}/></button>
-        {watchlist.some(watchId => watchId === movie.id)
-        ? <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Added to watchlist</span> : <span className="group-hover:absolute group-hover:whitespace-nowrap group-hover:text-sm group-hover:bottom-5 group-hover:ml-[-76px] group-hover:py-1 hidden group-hover:block transition-all duration-200">Add to watchlist</span>}
                         </div>
-                    </div>
 
-                    <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{movie.title}</h1>
-                    <h2 className="text-sm">{movie.release_date}</h2>
-                    <h2 className="text-sm">⭐{movie.vote_average}</h2>
-                    <p className="mb-2 text-sm">{movie.overview}</p>
+                    <h1 className="text-lightTextMain font-semibold text-xl dark:text-darkTextMain">{sectionApi.title}</h1>
+                    <h2 className="text-sm">{sectionApi.release_date}</h2>
+                    <h2 className="text-sm">⭐{sectionApi.vote_average}</h2>
+                    <p className="mb-2 text-sm">{sectionApi.overview}</p>
                     </div>
                     </div>
-                    ))}
-                        </div>
-                        <button onClick={scrollLeft} className="absolute left-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowLeft/>}</button>
-
-                        <button onClick={scrollRight} className="absolute right-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowRight/>}</button>
-                        </div>
+                    }
+                    </div>
+</div>
         )
     }
 
-export default HorizontalScroll
+export default MovieView
