@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import NavMenu from "./NavMenu.jsx";
 import SearchBar from "./SearchBar.jsx";
-import MovieView from "./MovieView.jsx";
+import HorizontalScroll from "./HorizontalScroll.jsx";
 import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 
 
@@ -49,10 +49,6 @@ function MovieDetails() {
         }
         setLoaded(true)
     }, [movieDetails])
-
-    useEffect(() => {
-        console.log(cast);
-    }, [movie])
 
             const [isLoggedIn, setIsLoggedIn] = useState(false)
             useEffect(() => {
@@ -326,15 +322,14 @@ function MovieDetails() {
                     </div>
                     ))}
                     </div>
-                    <button onClick={scrollLeft} className="absolute left-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65 md:hidden">{<FaArrowLeft/>}</button>
+                    <button onClick={scrollLeft} className="absolute left-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowLeft/>}</button>
 
-                    <button onClick={scrollRight} className="absolute right-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65 md:hidden">{<FaArrowRight/>}</button>
+                    <button onClick={scrollRight} className="absolute right-2 top-1/2 transform -translate-y-1/1 w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover hover:opacity-85 transition focus:outline-none focus:ring-2 focus:ring-accent/40 text-center opacity-65">{<FaArrowRight/>}</button>
                     </div>
                     </section>
 
                     <section id="trailerSection">
                     <h2 className="text-xl font-semibold">Trailer</h2>
-
                     {movieDetails.trailer ? (
                     <iframe
                     className="w-full h-[200px] md:h-[400px] md:-w-full rounded-lg mt-2"
@@ -345,6 +340,11 @@ function MovieDetails() {
                     : (
                     <p>No trailer available</p>
                         )}
+                    </section>
+
+                    <section className="block mt-5 mx-3">
+                    <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">SIMILAR MOVIES</h1>
+                    {<HorizontalScroll sectionApi={similar}/>}
                     </section>
 
                 {/* <section className="block mt-5 mx-3">
