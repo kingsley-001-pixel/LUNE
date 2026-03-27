@@ -175,7 +175,7 @@ const getMovieFullDetails = async (req, res) => {
         mainVideo = videoResults.find(v => v.type === "Teaser" && v.site === "YouTube");
     }
 
-    const cast = credits.cast ? credits.cast.slice(0, 6) : [];
+    const cast = credits.cast ? credits.cast.slice(0, 9) : [];
     const similarMovies = similar.results ? similar.results.slice(0, 10) : [];
 
     res.json({
