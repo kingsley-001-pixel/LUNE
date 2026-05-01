@@ -18,4 +18,3 @@ router.route('/watchlist/add').post(authmiddleware, addUserWatchlist)
 router.route('/watchlist/remove/:movieId').delete(authmiddleware, deleteUserWatchlist)
 
 export default router;
-

@@ -15,6 +15,9 @@ function MovieDetails() {
     const [similar, setSimilar] = useState([])
     const [error, setError] = useState(null)
     const [loaded, setLoaded] = useState(false)
+    const [reviews, setReviews] = useState([])
+    const [comment, setComment] = useState("")
+    const [rating, setRating] = useState(1)
     const { id } = useParams()
     const getYear = new Date().getFullYear()
 
@@ -39,6 +42,35 @@ function MovieDetails() {
     useEffect(() => {
         fetchMovieDetails()
     }, [id])
+
+    const submitReview = async () => {
+  const token = localStorage.getItem("token");
+
+  await fetch("/api/v1/reviews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      movieId: id,
+      comment,
+      rating
+    })
+  });
+
+  fetchReviews(); // refresh
+};
+
+    const fetchReviews = async () => {
+  const res = await fetch(`/api/v1/reviews/${id}`);
+  const data = await res.json();
+  setReviews(data);
+};
+
+useEffect(() => {
+  fetchReviews();
+}, [id]);
 
     useEffect(() => {
         if (movieDetails) {
@@ -84,6 +116,7 @@ function MovieDetails() {
         },
         body: JSON.stringify({movieId})
     })
+
                         const data = await response.json()
                     } 
                 } catch (error) {
@@ -347,11 +380,32 @@ function MovieDetails() {
                     {<HorizontalScroll sectionApi={similar}/>}
                     </section>
 
-                {/* <section className="block mt-5 mx-3">
-                    <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">TOP RATED MOVIES</h1>
-                    {movieDetails ? <MovieView sectionApi={movieDetails.similar}/> : <p className="text-center">Loading...</p>}
-                    {error && <button className="w-fit rounded-md py-1 px-2 font-medium text-white bg-primary hover:bg-primaryHover transition focus:outline-none focus:ring-2 focus:ring-accent/40 mt-5 text-center" onClick={() => fetchMovieDetails()}>Server error, click to retry</button>}
-                    </section> */}
+                    <section className="block mt-5 mx-3">
+                        <h2 className="text-xl font-semibold mt-6">Reviews</h2>
+                    <div className="mt-4 space-y-3"> {reviews.length === 0 ? (<p>No reviews yet</p>
+                    ) : (
+                    reviews.map((review) => (
+                    <div key={review._id} className="p-3 rounded bg-gray-800">
+                    <p className="font-semibold">{review.username}</p>
+                    <p className="text-sm">⭐ {review.rating}</p>
+                    <p>{review.comment}</p>
+                    </div>
+                    ))
+                    )}
+                    </div>
+                    </section>
+
+                    <section className="block mt-5 mx-3">
+                    <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Write your review..."/>
+                    <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                    />
+                    <button onClick={submitReview}>Post Review</button>
+                    </section>
 
                     <footer className="flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
                         <p className="text-center">Data provided by <a href="https://www.themoviedb.org/" className="underline hover:text-lightTextMuted">TMBD</a>
