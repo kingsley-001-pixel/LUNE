@@ -23,7 +23,13 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     min: 1,
     max: 5
-  }
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 }, { timestamps: true });
 
-export default mongoose.model("Review", reviewSchema);
+export const Review = mongoose.model("Review", reviewSchema);

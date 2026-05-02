@@ -30,6 +30,6 @@ app.use(express.urlencoded({extended: true}))
 
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/tmdb', tmdbRoute)
-app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/reviews", reviewRoute);
 
 export default app;

@@ -7,5 +7,7 @@ const router = express.Router();
 
 router.route("/:movieId").get(getMovieReviews);
 router.route('/').post(authmiddleware, createReview)
+router.route("/like/:reviewId").put(authmiddleware, toggleLikeReview);
+router.delete("/:id", authmiddleware, deleteReview);
 
 export default router;

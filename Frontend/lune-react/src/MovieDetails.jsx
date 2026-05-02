@@ -15,9 +15,10 @@ function MovieDetails() {
     const [similar, setSimilar] = useState([])
     const [error, setError] = useState(null)
     const [loaded, setLoaded] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     const [reviews, setReviews] = useState([])
     const [comment, setComment] = useState("")
-    const [rating, setRating] = useState(1)
+    const [rating, setRating] = useState(5)
     const { id } = useParams()
     const getYear = new Date().getFullYear()
 
@@ -44,33 +45,60 @@ function MovieDetails() {
     }, [id])
 
     const submitReview = async () => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  await fetch("/api/v1/reviews", {
+    await fetch("/api/v1/reviews/", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({
-      movieId: id,
-      comment,
-      rating
+        movieId: id,
+        comment,
+        rating
     })
-  });
+    });
 
-  fetchReviews(); // refresh
+    setShowModal(false);
+    fetchReviews();
 };
 
     const fetchReviews = async () => {
-  const res = await fetch(`/api/v1/reviews/${id}`);
-  const data = await res.json();
-  setReviews(data);
+    const res = await fetch(`http://localhost:4000/api/v1/reviews/${id}`);
+    const data = await res.json();
+    setReviews(data);
 };
 
 useEffect(() => {
-  fetchReviews();
+    fetchReviews();
 }, [id]);
+
+    const handleLike = async (id) => {
+    const token = localStorage.getItem("token");
+
+    await fetch(`/api/v1/reviews/like/${id}`, {
+    method: "PUT",
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+    });
+
+    fetchReviews();
+};
+
+    const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+
+    await fetch(`/api/v1/reviews/${id}`, {
+    method: "DELETE",
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+    });
+
+    fetchReviews();
+};
 
     useEffect(() => {
         if (movieDetails) {
@@ -227,19 +255,32 @@ useEffect(() => {
 
             const scrollContainerRef = React.useRef(null)
             
-                    const scrollLeft = () => {
+            const scrollLeft = () => {
                         scrollContainerRef.current.scrollBy({
                             left: -380,
                             behavior: "smooth"
                         })
-                    }
+            }
             
-                    const scrollRight = () => {
+            const scrollRight = () => {
                         scrollContainerRef.current.scrollBy({
                             left: 380,
                             behavior: "smooth"
                         })
-                    }
+            }
+            
+
+            const avgRating =
+    reviews.length > 0
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    : 0;
+
+    const [sort, setSort] = useState("new");
+
+const sortedReviews = [...reviews].sort((a, b) => {
+    if (sort === "top") return b.likes.length - a.likes.length;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+});
 
 
 
@@ -380,32 +421,88 @@ useEffect(() => {
                     {<HorizontalScroll sectionApi={similar}/>}
                     </section>
 
-                    <section className="block mt-5 mx-3">
-                        <h2 className="text-xl font-semibold mt-6">Reviews</h2>
-                    <div className="mt-4 space-y-3"> {reviews.length === 0 ? (<p>No reviews yet</p>
-                    ) : (
-                    reviews.map((review) => (
-                    <div key={review._id} className="p-3 rounded bg-gray-800">
+                    <section id="reviewsSection">
+                    <button
+                    onClick={() => setShowModal(true)}
+                    className="bg-primary text-white px-4 py-2 rounded-md mt-4">
+                    Write a Review
+                    </button>
+                    <div className="flex items-center gap-2 mb-4">
+                    <span className="text-yellow-400 text-lg">★</span>
+                    <span className="font-semibold">{avgRating}</span>
+                    <span className="text-sm text-gray-400">({reviews.length} reviews)</span>
+                    </div>
+                    <select onChange={(e) => setSort(e.target.value)}>
+                    <option value="new">Newest</option>
+                    <option value="top">Top</option>
+                    </select>
+
+                    {sortedReviews.map((review) => (
+                    <div key={review._id} className="p-4 rounded-xl bg-darkCard">
+                    <div className="flex justify-between">
                     <p className="font-semibold">{review.username}</p>
-                    <p className="text-sm">⭐ {review.rating}</p>
-                    <p>{review.comment}</p>
+
+                    <div>
+                    {[...Array(5)].map((_, i) => (
+                    <span key={i}>
+                    {i < review.rating ? "★" : "☆"}
+                    </span>
+                    ))}
                     </div>
-                    ))
+                    </div>
+
+                    <p className="mt-2 text-sm">{review.comment}</p>
+
+                    <div className="flex justify-between mt-3 text-sm">
+
+                    <span>{new Date(review.createdAt).toLocaleDateString()}</span>
+
+                    <div className="flex gap-3">
+
+                    {/* LIKE */}
+                    <button onClick={() => handleLike(review._id)}>
+                    👍 {review.likes.length}
+                    </button>
+
+                    {/* DELETE (ONLY OWNER) */}
+                    {user?._id === review.userId && (
+                    <button onClick={() => handleDelete(review._id)}>
+                    🗑
+                    </button>
                     )}
+
                     </div>
+                    </div>
+
+                    </div>
+                    ))}
                     </section>
 
-                    <section className="block mt-5 mx-3">
-                    <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Write your review..."/>
-                    <input
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={rating}
-                    onChange={(e) => setRating(e.target.value)}
+                    {/* REVIEW MODAL */}
+                    {showModal && (
+                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+
+                    <div className="bg-darkCard p-6 rounded-xl w-[90%] max-w-md">
+
+                    <h2 className="text-lg font-semibold mb-4">Write a review</h2>
+
+                    <textarea className="w-full p-2 rounded bg-transparent border" placeholder="Share your thoughts..." value={comment} onChange={(e) => setComment(e.target.value)}
                     />
-                    <button onClick={submitReview}>Post Review</button>
-                    </section>
+
+                    <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className="mt-2"/>
+
+                    <button onClick={submitReview} className="mt-4 bg-blue-500 px-4 py-2 rounded">
+                    Post Review
+                    </button>
+
+                    </div>
+                    <button
+                    onClick={() => setShowModal(false)}
+                    className="absolute top-2 right-3 text-gray-400">
+                    ✕
+                    </button>
+                    </div>
+                    )}
 
                     <footer className="flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
                         <p className="text-center">Data provided by <a href="https://www.themoviedb.org/" className="underline hover:text-lightTextMuted">TMBD</a>
