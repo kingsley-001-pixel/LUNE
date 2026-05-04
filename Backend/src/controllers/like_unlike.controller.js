@@ -1,20 +1,17 @@
 export const toggleLikeReview = async (req, res) => {
-  const { reviewId } = req.params;
+  const review = await Review.findById(req.params.id);
   const userId = req.user._id;
 
-  const review = await Review.findById(reviewId);
-
-  if (!review) return res.status(404).json({ message: "Review not found" });
+  if (!review) return res.status(404).json({ message: "Not found" });
 
   const alreadyLiked = review.likes.includes(userId);
 
   if (alreadyLiked) {
-    review.likes.pull(userId);
+    review.likes = review.likes.filter(id => id.toString() !== userId.toString());
   } else {
     review.likes.push(userId);
   }
 
   await review.save();
-
   res.json(review);
 };

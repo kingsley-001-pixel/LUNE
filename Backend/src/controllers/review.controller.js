@@ -1,48 +1,111 @@
-// controllers/review.controller.js
 import { Review } from "../models/review.model.js";
-import { User } from "../models/user.model.js";
 
-const createReview = async (req, res) => {
+/* CREATE REVIEW */
+export const createReview = async (req, res) => {
   try {
     const { movieId, comment, rating } = req.body;
+
     const review = await Review.create({
       movieId,
       userId: req.user._id,
       username: req.user.username,
       comment,
-      rating
+      rating,
+      type: "review"
     });
 
     res.status(201).json(review);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const getMovieReviews = async (req, res) => {
+/* GET MOVIE REVIEWS */
+export const getMovieReviews = async (req, res) => {
   try {
-    const { movieId } = req.params;
-
-    const reviews = await Review.find({ movieId }).sort({ createdAt: -1 });
+    const reviews = await Review.find({ movieId: req.params.movieId })
+      .sort({ createdAt: -1 });
 
     res.json(reviews);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const deleteReview = async (req, res) => {
-  const review = await Review.findById(req.params.id);
+/* LIKE TOGGLE */
+export const toggleLikeReview = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.reviewId);
 
-  if (!review) return res.status(404).json({ message: "Not found" });
+    if (!review) return res.status(404).json({ message: "Not found" });
 
-  if (review.userId.toString() !== req.user._id.toString()) {
-    return res.status(403).json({ message: "Not allowed" });
+    const userId = req.user._id;
+
+    const hasLiked = review.likes.some(
+  id => id.toString() === userId.toString()
+);
+
+    if (hasLiked) {
+      review.likes = review.likes.filter(
+        id => id.toString() !== userId.toString()
+      );
+    } else {
+      review.likes.push(userId);
+    }
+
+    await review.save();
+
+    res.json(review);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  await review.deleteOne();
-
-  res.json({ message: "Deleted" });
 };
 
-export { createReview, getMovieReviews, deleteReview };
+/* REPLY */
+export const addReply = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.reviewId);
+
+    if (!review) return res.status(404).json({ message: "Not found" });
+
+    review.replies.push({
+      userId: req.user._id,
+      username: req.user.username,
+      comment: req.body.comment
+    });
+
+    await review.save();
+
+    res.json(review);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// DELETE REVIEW
+export const deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+
+    // ❌ Not found
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    // ❌ Not owner
+    if (review.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await review.deleteOne();
+
+    res.json({ message: "Review deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

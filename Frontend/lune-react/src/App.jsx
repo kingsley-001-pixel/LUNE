@@ -9,6 +9,7 @@ import Search from "./Search.jsx"
 import Favorites from "./Favorites.jsx"
 import Watchlist from "./Watchlist.jsx"
 import MovieDetails from "./MovieDetails.jsx"
+import Feed from "./FeedPage.jsx"
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Welcome/>}/>
       <Route path="/dashboard" element={<Dashboard/>} />
+      <Route path="/feed" element={<Feed />} />
       <Route path="/genre/:genre" element={<GenrePage/>} />
       <Route path="/search/:movieName" element={<Search/>} />
       <Route path="/login" element={<Login/>} />

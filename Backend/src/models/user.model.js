@@ -30,8 +30,16 @@ const userSchema = new Schema ({
     watchlist: {
         type: [Number],
         default: []
-    }
-},
+    },
+    avatar: String,
+    bio: String,
+
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    createdAt: {
+        type: Date,
+        default: Date.now
+}},
 {
     timestamps: true
 }

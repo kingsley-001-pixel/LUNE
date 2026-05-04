@@ -5,6 +5,8 @@ function Welcome() {
         navigate('/dashboard')
     }, 5000);
     
+    
+
     return(
         <div className="bg-primary text-white block md:flex justify-center  text-center items-center h-screen">
             <div className="absolute top-[30%] bottom-0 left-0 right-0">

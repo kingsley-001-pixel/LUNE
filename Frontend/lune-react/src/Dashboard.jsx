@@ -129,7 +129,6 @@ function Dashboard({name='Guest'}) {
     }, [username])
 
     
-
     const genres = [
         {genre: "Action", code: "action"},
         {genre: "Adventure", code: "adventure"},

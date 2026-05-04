@@ -92,16 +92,14 @@ function Login() {
             setErrorMessage(data.message)
         } else {
             localStorage.setItem("token", data.token)
+            localStorage.setItem("user", JSON.stringify(data.user))
             setSuccessMessage(data.message)
             navigate('/dashboard')
-            setUsername("")
             setEmail("")
             setPassword("")
             setConfirmPassword("")
             setErrorMessage("")
-            
         }
-    
     }
 
     //  ENABLING ENTER KEY TO SIGN UP

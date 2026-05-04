@@ -15,6 +15,7 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  
   comment: {
     type: String,
     required: true
@@ -28,6 +29,14 @@ const reviewSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
+    }
+  ],
+  replies: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      username: String,
+      comment: String,
+      createdAt: { type: Date, default: Date.now }
     }
   ]
 }, { timestamps: true });

@@ -7,30 +7,19 @@
     background-clip: border-box;
 }
 
-@keyframes slideImages {
-    0% {
-        background-image: url(./assets/anime1.png);
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-    20% {
-        background-image: url(./assets/kdramaimage1.png);
-    }
-
-    40% {
-        background-image: url(./assets/movieimg.png);
-    }
-
-    60% {
-        background-image: url(./assets/anime2.png);
-    }
-
-    80% {
-        background-image: url(./assets/kdramaimage2.png);
-    }
-
-    100% {
-        background-image: url(./assets/movieimg2.png);
-    }
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
 }
 
 #spinner {

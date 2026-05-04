@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import NavMenu from "./NavMenu.jsx";
 import SearchBar from "./SearchBar.jsx";
 import HorizontalScroll from "./HorizontalScroll.jsx";
@@ -7,18 +7,23 @@ import { FaArrowLeft, FaArrowRight, FaHeart, FaBookmark } from "react-icons/fa";
 
 
 function MovieDetails() {
-    const token = localStorage.getItem("token")
-    const [movieDetails, setMovieDetails] = useState({})
-    const [movie, setMovie] = useState({})
-    const [cast, setCast] = useState([])
-    const [trailer, setTrailer] = useState({})
-    const [similar, setSimilar] = useState([])
-    const [error, setError] = useState(null)
-    const [loaded, setLoaded] = useState(false)
+    const token = localStorage.getItem("token");
+    const reviewRef = useRef(null);
+    const [movieDetails, setMovieDetails] = useState({});
+    const [movie, setMovie] = useState({});
+    const [cast, setCast] = useState([]);
+    const [trailer, setTrailer] = useState({});
+    const [similar, setSimilar] = useState([]);
+    const [error, setError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [reviews, setReviews] = useState([])
-    const [comment, setComment] = useState("")
-    const [rating, setRating] = useState(5)
+    const [reviews, setReviews] = useState([]);
+    const [comment, setComment] = useState("");
+    const [rating, setRating] = useState(5);
+    const [toast, setToast] = useState("");
+    const [liked, setLiked] = useState(false);
+    const [user, setUser] = useState(null);
+    const baseURL = "https://lune-backend-eclm.onrender.com"
     const { id } = useParams()
     const getYear = new Date().getFullYear()
 
@@ -26,7 +31,7 @@ function MovieDetails() {
 
     const fetchMovieDetails = async () => {
         try {
-            const response = await fetch(`https://lune-backend-eclm.onrender.com/api/v1/tmdb/movie?query=${id}`)
+            const response = await fetch(`${baseURL}/api/v1/tmdb/movie?query=${id}`)
             if (!response.ok) {
                     const error = await response.json();
                     console.error(`Movie Details fetch failed: ${error.message}`);
@@ -40,14 +45,11 @@ function MovieDetails() {
             console.log('Error fetching movie data', error);
         }
     }
-    useEffect(() => {
-        fetchMovieDetails()
-    }, [id])
 
     const submitReview = async () => {
     const token = localStorage.getItem("token");
 
-    await fetch("/api/v1/reviews/", {
+    await fetch("http://localhost:4000/api/v1/reviews/", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -60,24 +62,36 @@ function MovieDetails() {
     })
     });
 
+    setTimeout(() => {
+    reviewRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+
+    setToast("Review posted 🎉");
+    setTimeout(() => setToast(""), 2000);
     setShowModal(false);
     fetchReviews();
 };
-
     const fetchReviews = async () => {
     const res = await fetch(`http://localhost:4000/api/v1/reviews/${id}`);
     const data = await res.json();
     setReviews(data);
 };
-
 useEffect(() => {
+    fetchMovieDetails()
     fetchReviews();
 }, [id]);
+
+useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+}, []);
 
     const handleLike = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`/api/v1/reviews/like/${id}`, {
+    await fetch(`http://localhost:4000/api/v1/reviews/like/${id}`, {
     method: "PUT",
     headers: {
         Authorization: `Bearer ${token}`
@@ -90,7 +104,7 @@ useEffect(() => {
     const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`/api/v1/reviews/${id}`, {
+    await fetch(`http://localhost:4000/api/v1/reviews/${id}`, {
     method: "DELETE",
     headers: {
         Authorization: `Bearer ${token}`
@@ -272,15 +286,18 @@ useEffect(() => {
 
             const avgRating =
     reviews.length > 0
-    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    ? (reviews.reduce((acc, r) => acc + (r.rating || 0), 0) / reviews.length).toFixed(1)
     : 0;
 
     const [sort, setSort] = useState("new");
 
 const sortedReviews = [...reviews].sort((a, b) => {
-    if (sort === "top") return b.likes.length - a.likes.length;
+    if (sort === "top") return (b.likes?.length || 0) - (a.likes?.length || 0);
     return new Date(b.createdAt) - new Date(a.createdAt);
 });
+
+    const topReviewId = reviews?.reduce((max, r) =>
+    r.likes.length > (max?.likes.length || 0) ? r : max,null)?._id;
 
 
 
@@ -296,6 +313,12 @@ const sortedReviews = [...reviews].sort((a, b) => {
                     </div>
                     <NavMenu/>
                 </header>
+
+                {toast && (
+                <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+                {toast}
+                </div>
+                )}
 
                 <section className="block mt-5 mx-3">
                     {!movie ? (<p className="text-center">Loading...</p>) : 
@@ -404,7 +427,7 @@ const sortedReviews = [...reviews].sort((a, b) => {
 
                     <section id="trailerSection">
                     <h2 className="text-xl font-semibold">Trailer</h2>
-                    {movieDetails.trailer ? (
+                    {movieDetails.trailer?.key ? (
                     <iframe
                     className="w-full h-[200px] md:h-[400px] md:-w-full rounded-lg mt-2"
                     src={`https://www.youtube.com/embed/${movieDetails.trailer.key}`}
@@ -422,54 +445,98 @@ const sortedReviews = [...reviews].sort((a, b) => {
                     </section>
 
                     <section id="reviewsSection">
-                    <button
-                    onClick={() => setShowModal(true)}
-                    className="bg-primary text-white px-4 py-2 rounded-md mt-4">
-                    Write a Review
-                    </button>
+                    {reviews.length === 0 && (
+  <div className="text-center py-10">
+    <p className="text-gray-400">No reviews yet</p>
+
+    <p className="text-sm text-gray-500 mt-1">
+      Be the first to share your thoughts 🎬
+    </p>
+
+    <button
+      onClick={() => setShowModal(true)}
+      className="mt-4 bg-primary px-4 py-2 rounded-lg text-white hover:bg-primaryHover"
+    >
+      Write First Review
+    </button>
+  </div>
+)}
+                    {reviews.length > 0 && (
+                    <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-semibold tracking-widest md:text-3xl text-center">REVIEWS</h1>
+                    <button onClick={() => setShowModal(true)} className="bg-primary px-4 py-2 rounded-lg text-white hover:bg-primaryHover">Write a Review</button>
+                    </div>
+                    )}
                     <div className="flex items-center gap-2 mb-4">
                     <span className="text-yellow-400 text-lg">★</span>
                     <span className="font-semibold">{avgRating}</span>
                     <span className="text-sm text-gray-400">({reviews.length} reviews)</span>
                     </div>
-                    <select onChange={(e) => setSort(e.target.value)}>
+                    <select className="text-darkTextMain bg-black border border-gray-600 focus:ring-accent" onChange={(e) => setSort(e.target.value)}>
                     <option value="new">Newest</option>
                     <option value="top">Top</option>
                     </select>
 
+                    <div ref={reviewRef}></div>
                     {sortedReviews.map((review) => (
-                    <div key={review._id} className="p-4 rounded-xl bg-darkCard">
+                    <div key={review._id} className={`hover:scale-[1.01] hover:shadow-lg p-4 rounded-xl border border-t-lightCard w-[23rem] transition duration-200 ${review._id === topReviewId
+                    ? "border-yellow-400 border bg-yellow-500/10"
+                    : "bg-darkCard"
+                    }`}>
                     <div className="flex justify-between">
-                    <p className="font-semibold">{review.username}</p>
+                    <p className={`font-semibold text-[0.75rem] ${review._id === topReviewId
+                    ? "text-lightTextMain"
+                    : "text-darkTextMain"
+                    }`}>{review.username}:</p>
 
                     <div>
                     {[...Array(5)].map((_, i) => (
-                    <span key={i}>
+                    <span key={i} className={`transition-transform hover:scale-125 text-sm ${review._id === topReviewId
+                    ? "text-lightTextMain"
+                    : "text-darkTextMain"
+                    }`}>
                     {i < review.rating ? "★" : "☆"}
                     </span>
                     ))}
                     </div>
                     </div>
 
-                    <p className="mt-2 text-sm">{review.comment}</p>
+                    <div className="flex relative">
+                    <p className={`text-sm ${review._id === topReviewId
+                    ? "text-lightTextMain"
+                    : "text-darkTextMain"
+                    }`}>
+                    {review.comment} 
+                    </p>
 
-                    <div className="flex justify-between mt-3 text-sm">
-
-                    <span>{new Date(review.createdAt).toLocaleDateString()}</span>
+                    <span className={` text-[0.5rem] tracking-widest absolute top-[1.25rem] opacity-75 ${review._id === topReviewId
+                    ? "text-lightTextMain"
+                    : "text-darkTextMain"
+                    }`}>{new Date(review.createdAt).toLocaleDateString()}</span>
 
                     <div className="flex gap-3">
 
                     {/* LIKE */}
-                    <button onClick={() => handleLike(review._id)}>
-                    👍 {review.likes.length}
+                    <button onClick={() => {handleLike(review._id); 
+                    setLiked(true); 
+                    setTimeout(() => setLiked(false), 500);
+                    }} 
+                    className={`absolute right-0 transition transform active:scale-125 ${review._id === topReviewId
+                    ? "text-lightTextMain"
+                    : "text-darkTextMain"
+                    }`}>
+                    ❤️ {review.likes?.length || 0}
                     </button>
 
-                    {/* DELETE (ONLY OWNER) */}
-                    {user?._id === review.userId && (
-                    <button onClick={() => handleDelete(review._id)}>
-                    🗑
+                    {/* DELETE (ONLY OWNER)
+                    {
+                    user?.id === review.userId && 
+                    (
+                    <button onClick={() => handleDelete(review._id)} className="absolute left-40 bottom-0 text-sm text-gray-400 hover:text-red-500 transition transform active:scale-125">
+                    Delete
                     </button>
-                    )}
+                    )
+                    } */}
 
                     </div>
                     </div>
@@ -480,29 +547,79 @@ const sortedReviews = [...reviews].sort((a, b) => {
 
                     {/* REVIEW MODAL */}
                     {showModal && (
-                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
-                    <div className="bg-darkCard p-6 rounded-xl w-[90%] max-w-md">
+    {/* Backdrop click to close */}
+    <div
+      className="absolute inset-0"
+      onClick={() => setShowModal(false)}
+    ></div>
 
-                    <h2 className="text-lg font-semibold mb-4">Write a review</h2>
+    {/* Modal card */}
+    <div className="relative w-[92%] max-w-md bg-darkCard rounded-2xl p-6 shadow-2xl animate-fadeIn">
 
-                    <textarea className="w-full p-2 rounded bg-transparent border" placeholder="Share your thoughts..." value={comment} onChange={(e) => setComment(e.target.value)}
-                    />
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold text-white">
+          Write a Review
+        </h2>
 
-                    <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className="mt-2"/>
+        <button
+          onClick={() => setShowModal(false)}
+          className="active:scale-95 transition text-gray-400 hover:text-white text-lg"
+        >
+          ✕
+        </button>
+      </div>
 
-                    <button onClick={submitReview} className="mt-4 bg-blue-500 px-4 py-2 rounded">
-                    Post Review
-                    </button>
+      {/* Star Rating */}
+      <div className="flex gap-1 mb-4">
+        {[1,2,3,4,5].map((star) => (
+          <button
+            key={star}
+            onClick={() => setRating(star)}
+            className="transition active:scale-95 text-2xl"
+          >
+            <span className={star <= rating ? "text-yellow-400" : "text-gray-600"}>
+              ★
+            </span>
+          </button>
+        ))}
+      </div>
 
-                    </div>
-                    <button
-                    onClick={() => setShowModal(false)}
-                    className="absolute top-2 right-3 text-gray-400">
-                    ✕
-                    </button>
-                    </div>
-                    )}
+      {/* Comment box */}
+      <textarea
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        placeholder="Share your thoughts about this movie..."
+        className="w-full h-28 p-3 rounded-lg bg-black/30 border border-gray-700 
+                   text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+      />
+
+      {/* Actions */}
+      <div className="flex justify-end gap-3 mt-5">
+
+        <button
+          onClick={() => setShowModal(false)}
+          className="px-4 py-2 text-sm text-gray-400 hover:text-white"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={submitReview}
+          disabled={!comment || rating === 0}
+          className="px-5 py-2 text-sm bg-primary hover:bg-primaryHover disabled:opacity-50 
+                     text-white rounded-lg transition"
+        >
+          Post Review
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
 
                     <footer className="flex flex-col gap-3 justify-center items-center text-sm text-lightTextMuted dark:text-darkTextMuted">
                         <p className="text-center">Data provided by <a href="https://www.themoviedb.org/" className="underline hover:text-lightTextMuted">TMBD</a>
